@@ -56,7 +56,7 @@ const Dashboard = () => {
         ) : (
           <>
             {blogs.map((item, i) => (
-              <Card {...item} />
+              <Card key={i} {...item} page={page} />
             ))}
           </>
         )}

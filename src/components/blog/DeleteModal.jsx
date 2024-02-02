@@ -10,7 +10,7 @@ export default function DeleteModal({ open, handleClose }) {
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    deleteBlogs("blogs", _id);
+    deleteBlogs(_id);
     navigate(-1);
   };
 

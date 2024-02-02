@@ -30,9 +30,9 @@ export default function UpdateModal({ open, handleClose, data, setData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    putBlogs("blogs", _id, data);
+    putBlogs(_id, data);
     handleClose();
-    getDetails("blogs", { id: _id });
+    getDetails({ id: _id });
   };
 
   return (

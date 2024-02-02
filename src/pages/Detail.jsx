@@ -47,7 +47,7 @@ export default function Detail() {
   const { title, content, image, likes, comments, countOfVisitors } = details;
 
   React.useEffect(() => {
-    getDetails("blogs", { id: _id });
+    getDetails({ id: _id });
   }, []);
 
   const [data, setData] = React.useState({
@@ -89,7 +89,7 @@ export default function Detail() {
               details.createdAt && new Date(details.createdAt).toLocaleString()
             }
           />
-          
+
           <CardContent>
             <Typography component="h1" variant="body1">
               {title}

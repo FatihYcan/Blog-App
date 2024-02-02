@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Skeleton, Card } from "@mui/material";
+import { Typography, Skeleton, Card } from "@mui/material";
 
 const SkeletonCard = () => {
   return (

@@ -34,6 +34,11 @@ const blogSlice = createSlice({
       state.error = false;
     },
 
+    getLikeSuccess: (state) => {
+      state.loading = false;
+      state.error = false;
+    },
+
     getDetailSuccess: (state, { payload }) => {
       state.details = payload.apiData;
       state.loading = false;
@@ -42,7 +47,7 @@ const blogSlice = createSlice({
 
     getUserSuccess: (state, { payload }) => {
       state.users = payload.apiData;
-      state.pagination = payload.pagination;
+      state.pagination = { ...payload.pagination, limit: 10 };
       state.loading = false;
       state.error = false;
     },
@@ -58,6 +63,7 @@ export const {
   fetchStart,
   getBlogSuccess,
   getCategorySuccess,
+  getLikeSuccess,
   getDetailSuccess,
   getUserSuccess,
   fetchFail,

@@ -1,6 +1,7 @@
 import {
   fetchStart,
   getBlogSuccess,
+  getLikeSuccess,
   getCategorySuccess,
   getDetailSuccess,
   getUserSuccess,
@@ -26,83 +27,74 @@ const useBlogCalls = () => {
     }
   };
 
-  const postBlogs = async (url = "blogs", postData) => {
+  const postBlogs = async (postData) => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosWithToken.post(`/${url}/`, postData);
-      const apiData = data.data;
-      getBlogs(url);
-      dispatch(getBlogSuccess({ apiData, url }));
-      toastSuccessNotify(`${url} kayıdı eklenmiştir.`);
+      await axiosWithToken.post("/blogs/", postData);
+      toastSuccessNotify("blog kayıdı eklenmiştir.");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify(`${url} kayıdı kaydi eklenemiştir.`);
+      toastErrorNotify("blog kayıdı kaydi eklenemiştir.");
     }
   };
 
-  const putBlogs = async (url = "blogs", post_id, data) => {
+  const putBlogs = async (post_id, data) => {
     dispatch(fetchStart());
     try {
-      await axiosWithToken.put(`/${url}/${post_id}`, data);
-      toastSuccessNotify(`${url} kayıdı güncellenmiştir..`);
-      getBlogs(url);
+      await axiosWithToken.put(`/blogs/${post_id}`, data);
+      toastSuccessNotify("blog kayıdı güncellenmiştir..");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify(`${url} kaydi güncelenememiştir.`);
+      toastErrorNotify("blog kaydi güncelenememiştir.");
     }
   };
 
-  const deleteBlogs = async (url = "blogs", post_id) => {
+  const deleteBlogs = async (post_id) => {
     dispatch(fetchStart());
     try {
-      await axiosWithToken.delete(`/${url}/${post_id}/`);
-      toastSuccessNotify(`${url} bilgisi silinmiştir.`);
-      getBlogs(url);
+      await axiosWithToken.delete(`/blogs/${post_id}/`);
+      toastSuccessNotify("blog silinmiştir.");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify(`${url} silinemedi`);
+      toastErrorNotify("blog silinemedi");
     }
   };
 
-  const getCategories = async (url = "blogs") => {
+  const getCategories = async (url) => {
     const { data } = await axiosWithToken(`/${url}/`);
     const apiData = data.data;
     dispatch(getCategorySuccess({ apiData, url }));
   };
 
-  const postLikes = async (url = "blogs", post_id, detail = false) => {
+  const postLikes = async (url, post_id) => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`/${url}/${post_id}/postLike/`, null);
-      if (detail) {
-        getDetails(post_id);
-      } else {
-        getBlogs(url);
-      }
+      getBlogs(url);
+      dispatch(getLikeSuccess());
     } catch (error) {
       dispatch(fetchFail());
     }
   };
 
-  const getDetails = async (url = "blogs", post) => {
-    const { data } = await axiosWithToken(`/${url}/${post.id}/`);
+  const getDetails = async (post) => {
+    const { data } = await axiosWithToken(`/blogs/${post.id}/`);
     const apiData = data.data;
-    dispatch(getDetailSuccess({ apiData, url, post }));
+    dispatch(getDetailSuccess({ apiData }));
   };
 
-  const getUsers = async (url = "blogs", user) => {
-    const { data } = await axiosWithToken(`/${url}?author=${user.id}`);
+  const getUsers = async (user) => {
+    const { data } = await axiosWithToken(`/blogs?author=${user.id}`);
     const apiData = data.data;
     const pagination = data.details;
-    dispatch(getUserSuccess({ apiData, url, pagination }));
+    dispatch(getUserSuccess({ apiData, pagination }));
   };
 
-  const postComments = async (url = "blogs", data) => {
+  const postComments = async (url, data) => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post(`/${url}/`, data);
       toastSuccessNotify("Yorum yapılmıştır.");
-      getBlogs(url);
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Login olmadığınız için yorum yapılamamıştır");

@@ -33,11 +33,11 @@ const authSlice = createSlice({
     registerSuccess: (state, { payload }) => {
       state.loading = false;
       state.user = payload?.data?.username;
-      state.userId = payload?.data?.id;
+      state.userId = payload?.data?._id;
       state.token = payload?.token;
       state.username = payload?.data?.username;
-      state.email = payload?.user?.email;
-      state.image = payload?.user?.image;
+      state.email = payload?.data?.email;
+      state.image = payload?.data?.image;
     },
 
     logoutSuccess: (state) => {

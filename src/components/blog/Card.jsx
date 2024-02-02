@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import useBlogCalls from "../../hooks/useBlogCalls";
 
 export default function BlogCard({
+  page,
   _id,
   id,
   title,
@@ -22,36 +23,21 @@ export default function BlogCard({
   countOfVisitors,
   createdAt,
 }) {
-  const { user, userId } = useSelector((state) => state.auth);
-  const { postLikes, getDetails } = useBlogCalls();
+  const { userId } = useSelector((state) => state.auth);
+  const { postLikes, getBlogs } = useBlogCalls();
   const navigate = useNavigate();
 
-  const handleLike = () => {
-    userId ? postLikes("blogs", _id) : navigate("/auth");
+  const handleLike = async () => {
+    if (userId) {
+      await postLikes("blogs", _id);
+      await getBlogs(`/blogs?page=${page}&limit=10`);
+    } else {
+      navigate("/auth");
+    }
   };
 
-  // const handleDetail = async () => {
-  //   if (user) {
-  //     await getDetails("blogs", _id).then(() => {
-  //       navigate(`/detail/${_id}/`);
-  //     });
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }; //! çalışan fonskiyon
-
-  // const handleDetail = async () => {
-  //   if (user) {
-  //     await getDetails("blogs", { id: _id }).then(() => {
-  //       navigate(`/detail/${_id}/`);
-  //     });
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }; //! 2. çalışan
-
   const handleDetail = () => {
-    navigate(`/detail/${_id}/`);
+    navigate(`/detail/${_id}`);
   };
 
   return (

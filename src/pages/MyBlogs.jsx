@@ -9,20 +9,17 @@ import SkeletonCard from "../pages/SkeletonCard";
 const MyBlogs = () => {
   const { getUsers } = useBlogCalls();
   const { userId } = useSelector((state) => state.auth);
-  const { users, pagination } = useSelector((state) => state.blog);
+  const { users } = useSelector((state) => state.blog);
 
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getUsers("blogs", { id: userId });
-  }, [userId]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        await getUsers("blogs", { id: userId });
+        await getUsers({ id: userId });
       } finally {
         setLoading(false);
       }
@@ -31,8 +28,12 @@ const MyBlogs = () => {
     fetchData();
   }, [userId]);
 
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = users.slice(indexOfFirstBlog, indexOfLastBlog);
+
   const handlePage = (event, value) => {
-    setPage(value);
+    setCurrentPage(value);
   };
 
   return (
@@ -49,12 +50,12 @@ const MyBlogs = () => {
         }}
       >
         {loading ? (
-          Array.from({ length: users.length }).map((_, index) => (
+          Array.from({ length: blogsPerPage }).map((_, index) => (
             <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
               <SkeletonCard />
             </Grid>
           ))
-        ) : users.length === 0 ? (
+        ) : currentBlogs.length === 0 ? (
           <>
             <Stack
               spacing={2}
@@ -70,26 +71,26 @@ const MyBlogs = () => {
               </Typography>
               <Button variant="contained" component={Link} to="/new-blog">
                 WRITE BLOG
-              </Button>{" "}
+              </Button>
             </Stack>
           </>
         ) : (
           <>
-            {users.map((item, i) => (
-              <Card {...item} />
+            {currentBlogs.map((item, i) => (
+              <Card {...item} key={i} />
             ))}
           </>
         )}
       </Grid>
-      {users.length > 0 && (
+      {users.length > blogsPerPage && (
         <Stack
           spacing={2}
           sx={{ margin: 3, alignItems: "center", justifyContent: "center" }}
         >
           <Pagination
             color="primary"
-            count={pagination?.pages?.total}
-            page={page}
+            count={Math.ceil(users.length / blogsPerPage)}
+            page={currentPage}
             onChange={handlePage}
           />
         </Stack>

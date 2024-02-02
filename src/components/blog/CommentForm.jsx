@@ -19,7 +19,7 @@ const CommentForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await postComments("comments", data);
-    getDetails("blogs", { id: _id });
+    getDetails({ id: _id });
     setData({
       blogId: _id,
       comment: "",

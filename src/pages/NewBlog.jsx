@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 const NewBlog = () => {
   const { categories } = useSelector((state) => state.blog);
-  const { getBlogs, postBlogs, getCategories } = useBlogCalls();
+  const { postBlogs, getCategories } = useBlogCalls();
   const { userId } = useSelector((state) => state.auth);
 
   const [data, setData] = React.useState({
@@ -27,7 +27,6 @@ const NewBlog = () => {
   });
 
   useEffect(() => {
-    getBlogs("blogs");
     getCategories("categories");
   }, []);
 
@@ -37,7 +36,7 @@ const NewBlog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postBlogs("blogs", data);
+    postBlogs(data);
     setData({
       categoryId: "",
       title: "",

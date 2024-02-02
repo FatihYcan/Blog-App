@@ -55,7 +55,7 @@ const Register = () => {
 
           <Box sx={{ textAlign: "center", my: "1rem" }}>
             Do you have an account?{" "}
-            <Link to="/login" style={{ color: "red" }}>
+            <Link to="/auth" style={{ color: "red" }}>
               Sign in
             </Link>
           </Box>
