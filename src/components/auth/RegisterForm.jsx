@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, Grid } from "@mui/material";
+import { FormControl, Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Form } from "formik";
@@ -10,24 +10,30 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
 export const registerSchema = object({
-  username: string().max(20, "Kullanıcı adı 10 karakterden az olmalıdır."),
-  firstName: string().max(20, "İsim 20 karakterden az olmalıdır."),
-  lastName: string().max(20, "Soyisim 30 karakterden az olmalıdır."),
+  username: string()
+    .max(20, "Username 20 karakterden az olmalıdır.")
+    .required("Username zorunludur"),
+  firstName: string()
+    .max(20, "Firstname 20 karakterden az olmalıdır.")
+    .required("Firstname zorunludur"),
+  lastName: string()
+    .max(20, "Lastname 20 karakterden az olmalıdır.")
+    .required("Lastname zorunludur"),
   email: string()
     .email("Lütfen geçerli bir email giriniz.")
     .required("Email zorunludur"),
-  image: string().url("Geçerli bir URL giriniz."),
+  // image: string().url("Geçerli bir URL giriniz."),
   bio: string(),
   password: string()
-    .required("Şifre zorunludur")
-    .min(8, "Şifre en az 8 karakter olmalıdır")
-    .max(20, "Şifre en fazla 20 karakter olmalıdır")
-    .matches(/\d+/, "Şifre bir sayı içermelidir")
-    .matches(/[a-z]/, "Şifre bir küçük harf içermelidir")
-    .matches(/[A-Z]/, "Şifre bir büyük harf içermelidir")
+    .required("Password zorunludur")
+    .min(8, "Password en az 8 karakter olmalıdır")
+    .max(20, "Password en fazla 20 karakter olmalıdır")
+    .matches(/\d+/, "Password bir sayı içermelidir")
+    .matches(/[a-z]/, "Password bir küçük harf içermelidir")
+    .matches(/[A-Z]/, "Password bir büyük harf içermelidir")
     .matches(
       /[!/[@$!%*?&]+/,
-      "Şifre en az bir özel karakter (@$!%*?&) içermelidir"
+      "Password en az bir özel karakter (@$!%*?&) içermelidir"
     ),
 });
 
@@ -45,13 +51,14 @@ const RegisterForm = ({
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
   return (
     <Form>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormControl fullWidth margin="normal">
             <TextField
-              label="UserName"
+              label="Username"
               name="username"
               id="userName"
               type="text"
@@ -66,7 +73,7 @@ const RegisterForm = ({
           </FormControl>
           <FormControl fullWidth margin="normal">
             <TextField
-              label="FirstName"
+              label="Firstname"
               name="firstName"
               id="firstName"
               type="text"
@@ -81,7 +88,7 @@ const RegisterForm = ({
           </FormControl>
           <FormControl fullWidth margin="normal">
             <TextField
-              label="LastName"
+              label="Lastname"
               name="lastName"
               id="lastName"
               type="text"
@@ -96,7 +103,7 @@ const RegisterForm = ({
           </FormControl>
           <FormControl fullWidth margin="normal">
             <TextField
-              label="Email Address"
+              label="Email"
               name="email"
               id="email"
               type="email"
@@ -109,14 +116,17 @@ const RegisterForm = ({
               helperText={errors.email}
             />
           </FormControl>
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth>
+            <Typography component="h1" color={"gray"}>
+              Image
+            </Typography>
             <TextField
-              label="Image"
               name="image"
               id="image"
-              type="url"
+              type="file"
               variant="outlined"
               value={values.image}
+              accept="image/*"
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.image && Boolean(errors.image)}
@@ -144,6 +154,7 @@ const RegisterForm = ({
               id="password"
               type={showPassword ? "text" : "password"}
               variant="outlined"
+              required
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -167,12 +178,11 @@ const RegisterForm = ({
           </FormControl>
           <Button
             type="submit"
-            variant="contained"
-            size="large"
             fullWidth
+            variant="contained"
             sx={{ marginTop: "1rem" }}
           >
-            SIGN UP
+            Sign up
           </Button>
         </Grid>
       </Grid>

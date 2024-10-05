@@ -11,6 +11,17 @@ import {
 import { useDispatch } from "react-redux";
 // import {  useSelector } from "react-redux"
 import useAxios from "./useAxios";
+import { auth } from "../auth/firebase";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 
 const useAuthCalls = () => {
   const navigate = useNavigate();
@@ -39,10 +50,12 @@ const useAuthCalls = () => {
   const register = async (userInfo) => {
     dispatch(fetchStart());
     try {
-      // const { data } = await axios.post(
-      //   `${process.env.REACT_APP_BASE_URL}/users/`,
-      //   userInfo
-      // )
+      const x = await createUserWithEmailAndPassword(
+        auth,
+        userInfo.email,
+        userInfo.password
+      );
+      console.log(x);
       const { data } = await axiosPublic.post("/users/", userInfo);
       dispatch(registerSuccess(data));
       toastSuccessNotify("Register işlemi başarılı olmuştur.");
@@ -62,7 +75,7 @@ const useAuthCalls = () => {
       await axiosWithToken("/auth/logout/");
       toastSuccessNotify("Çıkış işlemi başarılı olmuştur.");
       dispatch(logoutSuccess());
-      navigate("/")
+      navigate("/");
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Çıkış işlemi başarısız olmuştur.");
