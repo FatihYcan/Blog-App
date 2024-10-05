@@ -31,10 +31,10 @@ const useBlogCalls = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.post("/blogs/", postData);
-      toastSuccessNotify("blog kayıdı eklenmiştir.");
+      toastSuccessNotify("Blog kaydı eklenmiştir.");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("blog kayıdı kaydi eklenemiştir.");
+      toastErrorNotify("Blog kaydı eklenemiştir.");
     }
   };
 
@@ -42,10 +42,10 @@ const useBlogCalls = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.put(`/blogs/${post_id}`, data);
-      toastSuccessNotify("blog kayıdı güncellenmiştir..");
+      toastSuccessNotify("Blog kaydı güncellenmiştir..");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("blog kaydi güncelenememiştir.");
+      toastErrorNotify("Blog kaydı güncellenememiştir.");
     }
   };
 
@@ -53,10 +53,10 @@ const useBlogCalls = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.delete(`/blogs/${post_id}/`);
-      toastSuccessNotify("blog silinmiştir.");
+      toastSuccessNotify("Blog silinmiştir.");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("blog silinemedi");
+      toastErrorNotify("Blog silinemedi");
     }
   };
 
@@ -78,8 +78,8 @@ const useBlogCalls = () => {
   };
 
   const getDetails = async (post) => {
-    const { data } = await axiosWithToken(`/blogs/${post.id}/`);
-    const apiData = data.data;
+      const { data } = await axiosWithToken(`/blogs/${post.id}/`);
+        const apiData = data.data;
     dispatch(getDetailSuccess({ apiData }));
   };
 

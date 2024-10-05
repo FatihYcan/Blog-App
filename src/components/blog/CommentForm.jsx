@@ -26,7 +26,7 @@ const CommentForm = () => {
     });
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <form onSubmit={handleSubmit}>
