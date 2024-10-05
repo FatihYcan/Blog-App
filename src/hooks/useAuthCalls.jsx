@@ -29,33 +29,14 @@ const useAuthCalls = () => {
   // const { token } = useSelector((state) => state.auth)
   const { axiosWithToken, axiosPublic } = useAxios();
 
-  const login = async (userInfo) => {
-    dispatch(fetchStart());
-    try {
-      // const { data } = await axios.post(
-      //   `${process.env.REACT_APP_BASE_URL}/auth/login/`,
-      //   userInfo
-      // )
-      const { data } = await axiosPublic.post("/auth/login/", userInfo);
-      dispatch(loginSuccess(data));
-      toastSuccessNotify("Login işlemi başarılı olmuştur.");
-      navigate("/");
-    } catch (error) {
-      dispatch(fetchFail());
-      toastErrorNotify("Login işlemi başarısız olmuştur.");
-      // console.log(error);
-    }
-  };
-
   const register = async (userInfo) => {
     dispatch(fetchStart());
     try {
-      const x = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         userInfo.email,
         userInfo.password
       );
-      console.log(x);
       const { data } = await axiosPublic.post("/users/", userInfo);
       dispatch(registerSuccess(data));
       toastSuccessNotify("Register işlemi başarılı olmuştur.");
@@ -63,6 +44,20 @@ const useAuthCalls = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Register işlemi başarısız olmuştur.");
+    }
+  };
+
+  const login = async (userInfo) => {
+    dispatch(fetchStart());
+    try {
+      await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password);
+      const { data } = await axiosPublic.post("/auth/login/", userInfo);
+      dispatch(loginSuccess(data));
+      toastSuccessNotify("Login işlemi başarılı olmuştur.");
+      navigate("/");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Login işlemi başarısız olmuştur.");
     }
   };
 
@@ -82,7 +77,7 @@ const useAuthCalls = () => {
     }
   };
 
-  return { login, register, logout };
+  return { register, login, logout };
 };
 
 export default useAuthCalls;

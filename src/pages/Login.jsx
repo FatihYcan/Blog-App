@@ -1,62 +1,107 @@
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import LockIcon from "@mui/icons-material/Lock";
+import * as React from "react";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import MuiCard from "@mui/material/Card";
+import { styled } from "@mui/material/styles";
+import GoogleIcon from "../assets/icons/GoogleIcon";
+import { useNavigate } from "react-router-dom";
+import useAuthCalls from "../hooks/useAuthCalls";
 import LoginForm, { loginSchema } from "../components/auth/LoginForm";
 import { Formik } from "formik";
-import useAuthCalls from "../hooks/useAuthCalls";
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignSelf: "center",
+  width: "100%",
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: "auto",
+  [theme.breakpoints.up("sm")]: {
+    maxWidth: "450px",
+  },
+}));
+
+const SignInContainer = styled(Stack)(({ theme }) => ({
+  minHeight: "100%",
+  padding: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    padding: theme.spacing(4),
+  },
+  "&::before": {
+    content: '""',
+    display: "block",
+    position: "absolute",
+    zIndex: -1,
+    inset: 0,
+    backgroundImage:
+      "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
+    backgroundRepeat: "no-repeat",
+  },
+}));
 
 const Login = () => {
   const { login } = useAuthCalls();
+  const navigate = useNavigate();
 
   return (
-    <Container maxWidth="lg" sx={{ minHeight: "90vh" }}>
-      <Container maxWidth="xs">
-        <Box
-          marginTop="2rem"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
+    <SignInContainer direction="column" justifyContent="space-between">
+      <Card variant="outlined">
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
         >
-          <Avatar
-            sx={{
-              backgroundColor: "#0d47a1",
-              m: "auto",
-              width: 40,
-              height: 40,
+          Sign in
+        </Typography>
+
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={loginSchema}
+          onSubmit={(values, actions) => {
+            login(values);
+            actions.resetForm();
+            actions.setSubmitting(false);
+          }}
+          component={(props) => <LoginForm {...props} />}
+        ></Formik>
+
+        <Box sx={{ textAlign: "center" }}>
+          Don't have an account?{" "}
+          <Link
+            onClick={() => navigate("/register")}
+            style={{
+              color: "red",
+              cursor: "pointer",
+              textDecoration: "none",
             }}
           >
-            <LockIcon size="30" />
-          </Avatar>
-          <Typography variant="h4" align="center" mb={1} color="#0d47a1">
-            Log in
-          </Typography>
-
-          <Formik
-            initialValues={{
-              email: "",
-              password: "",
-            }}
-            validationSchema={loginSchema}
-            onSubmit={(values, actions) => {
-              login(values);
-              actions.resetForm();
-              actions.setSubmitting(false);
-            }}
-            component={(props) => <LoginForm {...props} />}
-          ></Formik>
-
-          <Box sx={{ textAlign: "center", my: "1rem" }}>
-            Don't have an account?{" "}
-            <Link to="/register" style={{ color: "red" }}>
-              Sign up
-            </Link>
-          </Box>
+            Sign up
+          </Link>
         </Box>
-      </Container>
-    </Container>
+
+        <Divider>
+          <Typography sx={{ color: "text.secondary" }}>or</Typography>
+        </Divider>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => alert("Sign in with Google")}
+            startIcon={<GoogleIcon color="currentColor" />}
+          >
+            Sign in with Google
+          </Button>
+        </Box>
+      </Card>
+    </SignInContainer>
   );
 };
 

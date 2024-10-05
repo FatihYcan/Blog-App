@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, Grid } from "@mui/material";
+import { Box, FormControl, Grid, Link } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Form } from "formik";
@@ -8,6 +8,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import ForgotPassword from "../../pages/ForgotPassword";
 
 export const loginSchema = object({
   email: string()
@@ -28,19 +29,29 @@ export const loginSchema = object({
 
 const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Form>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormControl fullWidth margin="normal">
             <TextField
-              label="Email Address"
+              label="Email"
               name="email"
               id="email"
               type="email"
@@ -54,6 +65,22 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
             />
           </FormControl>
           <FormControl fullWidth margin="normal">
+            <Box sx={{ textAlign: "end" }}>
+              <Link
+                component="button"
+                type="button"
+                onClick={handleClickOpen}
+                variant="body2"
+                sx={{ alignSelf: "baseline" }}
+                style={{
+                  color: "red",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                }}
+              >
+                Forgot your password?
+              </Link>
+            </Box>
             <TextField
               label="Password"
               name="password"
@@ -82,14 +109,14 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
               }}
             />
           </FormControl>
+          <ForgotPassword open={open} handleClose={handleClose} />
           <Button
             type="submit"
-            variant="contained"
-            size="large"
             fullWidth
+            variant="contained"
             sx={{ marginTop: "1rem" }}
           >
-            SIGN IN
+            Sign in
           </Button>
         </Grid>
       </Grid>
