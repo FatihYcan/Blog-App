@@ -27,7 +27,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  minHeight: "100%",
+  minHeight: "87vh",
   padding: theme.spacing(2),
   [theme.breakpoints.up("sm")]: {
     padding: theme.spacing(4),
@@ -45,7 +45,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const Login = () => {
-  const { login } = useAuthCalls();
+  const { login, signUpProvider } = useAuthCalls();
   const navigate = useNavigate();
 
   return (
@@ -94,7 +94,7 @@ const Login = () => {
           <Button
             fullWidth
             variant="outlined"
-            onClick={() => alert("Sign in with Google")}
+            onClick={signUpProvider}
             startIcon={<GoogleIcon color="currentColor" />}
           >
             Sign in with Google

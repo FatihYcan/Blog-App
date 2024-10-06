@@ -22,12 +22,17 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { useEffect } from "react";
 
 const useAuthCalls = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { token } = useSelector((state) => state.auth)
   const { axiosWithToken, axiosPublic } = useAxios();
+
+  // useEffect(() => {
+  //   userObserver();
+  // }, []);
 
   const register = async (userInfo) => {
     dispatch(fetchStart());
@@ -61,12 +66,55 @@ const useAuthCalls = () => {
     }
   };
 
+  const signUpProvider = () => {
+    dispatch(fetchStart());
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        const token = user.accessToken;
+
+        dispatch(
+          loginSuccess({
+            user: {
+              username: user.displayName,
+              id: user.uid,
+              email: user.email,
+              image: user.photoURL,
+            },
+            token: token,
+          })
+        );
+
+        // navigate(location.state?.from || path);
+        navigate("/");
+        toastSuccessNotify("Login işlemi başarılı olmuştur.");
+      })
+      .catch((error) => {
+        dispatch(fetchFail());
+        toastErrorNotify("Login işlemi başarısız olmuştur.");
+      });
+  };
+
+  // const userObserver = () => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       console.log(user);
+  //       // const { email, displayName, photoURL } = user;
+  //       // setCurrentUser({ email, displayName, photoURL });
+  //     } else {
+  //       // setCurrentUser(false);
+  //     }
+  //   });
+  // };
+
   const logout = async () => {
     dispatch(fetchStart());
     try {
       // await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`, {
       //   headers: { Authorization: `Token ${token}` },
       // })
+      signOut(auth);
       await axiosWithToken("/auth/logout/");
       toastSuccessNotify("Çıkış işlemi başarılı olmuştur.");
       dispatch(logoutSuccess());
@@ -77,7 +125,7 @@ const useAuthCalls = () => {
     }
   };
 
-  return { register, login, logout };
+  return { register, login, signUpProvider, logout };
 };
 
 export default useAuthCalls;

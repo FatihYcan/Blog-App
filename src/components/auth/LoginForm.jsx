@@ -9,6 +9,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import ForgotPassword from "../../pages/ForgotPassword";
+import useAuthCalls from "../../hooks/useAuthCalls";
 
 export const loginSchema = object({
   email: string()
@@ -29,20 +30,12 @@ export const loginSchema = object({
 
 const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const { forgotPassword } = useAuthCalls();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -69,7 +62,7 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
               <Link
                 component="button"
                 type="button"
-                onClick={handleClickOpen}
+                onClick={() => forgotPassword(values.email)}
                 variant="body2"
                 sx={{ alignSelf: "baseline" }}
                 style={{
@@ -109,7 +102,6 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
               }}
             />
           </FormControl>
-          <ForgotPassword open={open} handleClose={handleClose} />
           <Button
             type="submit"
             fullWidth
