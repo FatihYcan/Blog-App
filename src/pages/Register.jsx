@@ -64,6 +64,7 @@ const Register = () => {
             validationSchema={registerSchema}
             onSubmit={(values, actions) => {
               register(values);
+              console.log(values);
               actions.resetForm();
               actions.setSubmitting(false);
             }}

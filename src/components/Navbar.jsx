@@ -1,11 +1,12 @@
-import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import useAuthCalls from "../hooks/useAuthCalls";
-import { useSelector } from "react-redux";
+import { NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import image from "../img/logo.jpg";
 import avatar from "../assets/icons/avatar.png";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import useAuthCalls from "../hooks/useAuthCalls";
+import logo from "../img/logo.jpg";
 
 const navigation = [
   { name: "DASHBORD", to: "/", current: false },
@@ -18,61 +19,57 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const { user } = useSelector((state) => state.auth);
+  const { user, image } = useSelector((state) => state.auth);
   const { logout } = useAuthCalls();
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
-      {({ open }) => (
-        <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
-                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="absolute -inset-0.5" />
-                  <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
+    <>
+      <Disclosure as="nav" className="bg-gray-800 fixed w-full z-20 top-0">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <NavDropdown.Item
+                  className="md:text-2xl font-semibold cursor-pointer"
+                  href="/"
+                >
+                  <img className="h-8 w-auto" src={logo} alt={logo} />
+                </NavDropdown.Item>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <img className="h-8 w-auto" src={image} alt="Your Company" />
-                </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.to}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "rounded-md px-3 py-2 text-sm font-medium"
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            </div>
+            <div className="hidden md:block">
+              <div className="ml-4 flex items-center md:ml-6">
+                {user && <h5 className="mr-2 capitalize">{user}</h5>}
+
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
+                        alt="user"
+                        src={image || avatar}
                         className="h-8 w-8 rounded-full"
-                        src={avatar}
-                        alt=""
+                        referrerPolicy="no-referrer"
                       />
                     </Menu.Button>
                   </div>
@@ -85,9 +82,25 @@ export default function Navbar() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    >
                       {!user && (
                         <>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                to="/register"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Register
+                              </Link>
+                            )}
+                          </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
                               <Link
@@ -105,7 +118,6 @@ export default function Navbar() {
                       )}
                       {user && (
                         <>
-                          {" "}
                           <Menu.Item>
                             {({ active }) => (
                               <Link
@@ -153,29 +165,95 @@ export default function Navbar() {
                 </Menu>
               </div>
             </div>
-          </div>
-
-          <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2 ">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="-mr-2 flex md:hidden">
+              {/* Mobile menu button */}
+              <Disclosure.Button className="group relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <span className="absolute -inset-0.5" />
+                <span className="sr-only">Open main menu</span>
+                <Bars3Icon
+                  aria-hidden="true"
+                  className="block h-6 w-6 group-data-[open]:hidden"
+                />
+                <XMarkIcon
+                  aria-hidden="true"
+                  className="hidden h-6 w-6 group-data-[open]:block"
+                />
+              </Disclosure.Button>
             </div>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+          </div>
+        </div>
+
+        <Disclosure.Panel className="md:hidden">
+          <div className="space-y-1 px-4 pb-3 pt-2 sm:px-3">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.to}
+                className={classNames(
+                  item.current
+                    ? "bg-gray-900 text-white"
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                  "block rounded-md px-3 py-2 text-base font-medium"
+                )}
+                aria-current={item.current ? "page" : undefined}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+          <div className="border-t border-gray-700 pb-3 pt-4">
+            <div className="flex items-center px-5">
+              <div className="flex-shrink-0">
+                <img
+                  alt="user"
+                  src={image || avatar}
+                  className="h-8 w-8 rounded-full"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="ml-3">
+                <div className="text-base font-medium leading-none">
+                  {user && <h5 className="mr-2 capitalize">{user}</h5>}
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 space-y-1 px-2">
+              <Disclosure.Button className="block rounded-md px-3 py-2 text-base font-medium focus:outline-none">
+                {!user ? (
+                  <>
+                    <Link to="/register" className="block text-md text-white">
+                      Register
+                    </Link>
+                    <Link to="/login" className="block text-md mt-3 text-white">
+                      Login
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/my-blogs" className="block text-md text-white">
+                      My Blogs
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block text-md mt-3 text-white"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/"
+                      className="block text-md text-white mt-3"
+                      onClick={logout}
+                    >
+                      Logout
+                    </Link>
+                  </>
+                )}
+              </Disclosure.Button>
+            </div>
+          </div>
+        </Disclosure.Panel>
+      </Disclosure>
+      <div className="h-[80px]"></div>
+    </>
   );
 }
