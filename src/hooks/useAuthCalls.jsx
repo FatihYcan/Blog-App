@@ -1,4 +1,3 @@
-// import axios from "axios"
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +8,6 @@ import {
   registerSuccess,
 } from "../features/authSlice";
 import { useDispatch } from "react-redux";
-// import {  useSelector } from "react-redux"
 import useAxios from "./useAxios";
 import { auth } from "../auth/firebase";
 import {
@@ -27,7 +25,6 @@ import { useEffect } from "react";
 const useAuthCalls = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const { token } = useSelector((state) => state.auth)
   const { axiosWithToken, axiosPublic } = useAxios();
 
   // useEffect(() => {
@@ -42,6 +39,16 @@ const useAuthCalls = () => {
         userInfo.email,
         userInfo.password
       );
+
+      // Mevcut kullanıcıları localStorage'dan al
+      const users = JSON.parse(localStorage.getItem("users"));
+
+      // Yeni kullanıcıyı diziye ekle
+      users.push({ email: userInfo.email, password: userInfo.password });
+
+      // Diziyi tekrar localStorage'a kaydet
+      localStorage.setItem("users", JSON.stringify(users));
+
       const { data } = await axiosPublic.post("/users/", userInfo);
       dispatch(registerSuccess(data));
       toastSuccessNotify("Register işlemi başarılı olmuştur.");
@@ -66,34 +73,85 @@ const useAuthCalls = () => {
     }
   };
 
-  const signUpProvider = () => {
+  const signUpProvider = async () => {
     dispatch(fetchStart());
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        const token = user.accessToken;
+    try {
+      const result = await signInWithPopup(auth, provider);
 
-        dispatch(
-          loginSuccess({
-            user: {
-              username: user.displayName,
-              id: user.uid,
-              email: user.email,
-              image: user.photoURL,
-            },
-            token: token,
-          })
-        );
+      // Rastgele şifre oluştur
+      const randomPassword = generateRandomPassword(12);
 
-        // navigate(location.state?.from || path);
-        navigate("/");
-        toastSuccessNotify("Login işlemi başarılı olmuştur.");
-      })
-      .catch((error) => {
-        dispatch(fetchFail());
-        toastErrorNotify("Login işlemi başarısız olmuştur.");
-      });
+      localStorage.setItem(`${result.user.email}`, randomPassword);
+
+      const Register = {
+        username: result.user.displayName,
+        firstName: result._tokenResponse.firstName,
+        lastName: result._tokenResponse.lastName,
+        email: result.user.email,
+        image: result.user.photoURL,
+        bio: "",
+        password: randomPassword,
+      };
+
+      const { data } = await axiosPublic.post("/users/", Register);
+      dispatch(registerSuccess(data));
+      toastSuccessNotify("Register işlemi başarılı olmuştur.");
+      navigate("/");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Register işlemi başarısız olmuştur.");
+    }
+  };
+
+  const signInProvider = async () => {
+    dispatch(fetchStart());
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      const password = localStorage.getItem(`${result.user.email}`);
+
+      const Login = {
+        email: result.user.email,
+        password: password,
+      };
+
+      const { data } = await axiosPublic.post("/auth/login/", Login);
+      dispatch(loginSuccess(data));
+      toastSuccessNotify("Login işlemi başarılı olmuştur.");
+      navigate("/");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Login işlemi başarısız olmuştur.");
+    }
+  };
+
+  const generateRandomPassword = (length = 12) => {
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!/[@$!%*?&";
+
+    const allCharacters = lowercase + uppercase + numbers + symbols;
+
+    // En az bir karakter türünden rastgele bir karakter ekle
+    const passwordArray = [
+      lowercase[Math.floor(Math.random() * lowercase.length)],
+      uppercase[Math.floor(Math.random() * uppercase.length)],
+      numbers[Math.floor(Math.random() * numbers.length)],
+      symbols[Math.floor(Math.random() * symbols.length)],
+    ];
+
+    // Geri kalan karakterleri rastgele seç
+    for (let i = 4; i < length; i++) {
+      passwordArray.push(
+        allCharacters[Math.floor(Math.random() * allCharacters.length)]
+      );
+    }
+
+    // Şifreyi karıştır
+    return passwordArray.sort(() => Math.random() - 0.5).join("");
   };
 
   // const userObserver = () => {
@@ -108,12 +166,20 @@ const useAuthCalls = () => {
   //   });
   // };
 
+  const forgotPassword = async () => {
+    dispatch(fetchStart());
+    try {
+      toastSuccessNotify(
+        "Unutmuş olduğunuz parola password kısmına yazılmıştır."
+      );
+    } catch (error) {
+      dispatch(fetchFail());
+    }
+  };
+
   const logout = async () => {
     dispatch(fetchStart());
     try {
-      // await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`, {
-      //   headers: { Authorization: `Token ${token}` },
-      // })
       signOut(auth);
       await axiosWithToken("/auth/logout/");
       toastSuccessNotify("Çıkış işlemi başarılı olmuştur.");
@@ -125,7 +191,14 @@ const useAuthCalls = () => {
     }
   };
 
-  return { register, login, signUpProvider, logout };
+  return {
+    register,
+    login,
+    signUpProvider,
+    signInProvider,
+    forgotPassword,
+    logout,
+  };
 };
 
 export default useAuthCalls;

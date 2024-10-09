@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import ForgotPassword from "../../pages/ForgotPassword";
 import useAuthCalls from "../../hooks/useAuthCalls";
+import { toastErrorNotify } from "../../helper/ToastNotify";
 
 export const loginSchema = object({
   email: string()
@@ -28,7 +29,14 @@ export const loginSchema = object({
     ),
 });
 
-const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
+const LoginForm = ({
+  values,
+  handleChange,
+  errors,
+  touched,
+  handleBlur,
+  setFieldValue,
+}) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { forgotPassword } = useAuthCalls();
 
@@ -36,6 +44,19 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleForgotPassword = () => {
+    const users = JSON.parse(localStorage.getItem("users"));
+
+    const foundUser = users.find((user) => user.email === values.email);
+
+    if (foundUser) {
+      forgotPassword();
+      setFieldValue("password", foundUser.password);
+    } else {
+      toastErrorNotify("Lütfen sisteme kayıtlı email adresini giriniz.");
+    }
   };
 
   return (
@@ -62,7 +83,7 @@ const LoginForm = ({ values, handleChange, errors, touched, handleBlur }) => {
               <Link
                 component="button"
                 type="button"
-                onClick={() => forgotPassword(values.email)}
+                onClick={handleForgotPassword}
                 variant="body2"
                 sx={{ alignSelf: "baseline" }}
                 style={{

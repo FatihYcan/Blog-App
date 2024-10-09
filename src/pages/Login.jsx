@@ -45,7 +45,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const Login = () => {
-  const { login, signUpProvider } = useAuthCalls();
+  const { login, signInProvider } = useAuthCalls();
   const navigate = useNavigate();
 
   return (
@@ -94,7 +94,7 @@ const Login = () => {
           <Button
             fullWidth
             variant="outlined"
-            onClick={signUpProvider}
+            onClick={signInProvider}
             startIcon={<GoogleIcon color="currentColor" />}
           >
             Sign in with Google

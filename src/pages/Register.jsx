@@ -37,7 +37,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const Register = () => {
-  const { register } = useAuthCalls();
+  const { register, signUpProvider } = useAuthCalls();
   const navigate = useNavigate();
   return (
     <>
@@ -90,7 +90,7 @@ const Register = () => {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert("Sign up with Google")}
+              onClick={signUpProvider}
               startIcon={<GoogleIcon color="currentColor" />}
             >
               Sign up with Google

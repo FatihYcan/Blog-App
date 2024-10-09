@@ -78,18 +78,22 @@ const useBlogCalls = () => {
   };
 
   const getDetails = async (post) => {
-      const { data } = await axiosWithToken(`/blogs/${post.id}/`);
-        const apiData = data.data;
+    const { data } = await axiosWithToken(`/blogs/${post.id}/`);
+    const apiData = data.data;
     dispatch(getDetailSuccess({ apiData }));
   };
 
   const getUsers = async (user) => {
-    const { data } = await axiosWithToken(`/blogs?author=${user.id}`);
-    const apiData = data.data;
-    const pagination = data.details;
-    dispatch(getUserSuccess({ apiData, pagination }));
+    dispatch(fetchStart());
+    try {
+      const { data } = await axiosWithToken(`/blogs?author=${user.id}`);
+      const apiData = data.data;
+      const pagination = data.details;
+      dispatch(getUserSuccess({ apiData, pagination }));
+    } catch (error) {
+      dispatch(fetchFail());
+    }
   };
-
   const postComments = async (url, data) => {
     dispatch(fetchStart());
     try {

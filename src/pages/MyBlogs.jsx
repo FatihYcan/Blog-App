@@ -9,23 +9,13 @@ import SkeletonCard from "../pages/SkeletonCard";
 const MyBlogs = () => {
   const { getUsers } = useBlogCalls();
   const { userId } = useSelector((state) => state.auth);
-  const { users } = useSelector((state) => state.blog);
+  const { users, loading } = useSelector((state) => state.blog);
 
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 10;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await getUsers({ id: userId });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    getUsers({ id: userId });
   }, [userId]);
 
   const indexOfLastBlog = currentPage * blogsPerPage;
