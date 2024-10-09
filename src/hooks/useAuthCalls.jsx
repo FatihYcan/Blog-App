@@ -13,35 +13,21 @@ import { auth } from "../auth/firebase";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth";
-import { useEffect } from "react";
 
 const useAuthCalls = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { axiosWithToken, axiosPublic } = useAxios();
 
-  // useEffect(() => {
-  //   userObserver();
-  // }, []);
-
   const register = async (userInfo) => {
     dispatch(fetchStart());
     try {
-      await createUserWithEmailAndPassword(
-        auth,
-        userInfo.email,
-        userInfo.password
-      );
-
       // Mevcut kullanıcıları localStorage'dan al
-      const users = JSON.parse(localStorage.getItem("users"));
+      const users = JSON.parse(localStorage.getItem("users")) || [];
 
       // Yeni kullanıcıyı diziye ekle
       users.push({ email: userInfo.email, password: userInfo.password });
@@ -52,24 +38,40 @@ const useAuthCalls = () => {
       const { data } = await axiosPublic.post("/users/", userInfo);
       dispatch(registerSuccess(data));
       toastSuccessNotify("Register işlemi başarılı olmuştur.");
+      await createUserWithEmailAndPassword(
+        auth,
+        userInfo.email,
+        userInfo.password
+      );
       navigate("/");
+      return true;
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Register işlemi başarısız olmuştur.");
+
+      if (error.response.data.message.includes("dup key: { username")) {
+        toastErrorNotify(
+          "Bu username daha önce alınmış. Lütfen başka bir username seçin."
+        );
+      } else if (error.response.data.message.includes("dup key: { email")) {
+        toastErrorNotify(
+          "Bu email daha önce alınmış. Lütfen başka bir email girin."
+        );
+      }
+      return false;
     }
   };
 
   const login = async (userInfo) => {
     dispatch(fetchStart());
     try {
-      await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password);
       const { data } = await axiosPublic.post("/auth/login/", userInfo);
       dispatch(loginSuccess(data));
       toastSuccessNotify("Login işlemi başarılı olmuştur.");
+      await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password);
       navigate("/");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Login işlemi başarısız olmuştur.");
+      toastErrorNotify("Yanlış email veya password yazılmış.");
     }
   };
 
@@ -100,7 +102,9 @@ const useAuthCalls = () => {
       navigate("/");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Register işlemi başarısız olmuştur.");
+      toastErrorNotify(
+        "Bu username ve emaile sahip google hesabı daha önce kaydedilmiş. Lütfen başka bir username ve emaile sahip google hesabı ile giriş yapın."
+      );
     }
   };
 
@@ -123,7 +127,9 @@ const useAuthCalls = () => {
       navigate("/");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Login işlemi başarısız olmuştur.");
+      toastErrorNotify(
+        "Bu username ve emaile sahip google hesabı daha önce kaydedilmemiş. Lütfen kayıt olun."
+      );
     }
   };
 
@@ -154,18 +160,6 @@ const useAuthCalls = () => {
     return passwordArray.sort(() => Math.random() - 0.5).join("");
   };
 
-  // const userObserver = () => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       console.log(user);
-  //       // const { email, displayName, photoURL } = user;
-  //       // setCurrentUser({ email, displayName, photoURL });
-  //     } else {
-  //       // setCurrentUser(false);
-  //     }
-  //   });
-  // };
-
   const forgotPassword = async () => {
     dispatch(fetchStart());
     try {
@@ -180,14 +174,13 @@ const useAuthCalls = () => {
   const logout = async () => {
     dispatch(fetchStart());
     try {
-      signOut(auth);
       await axiosWithToken("/auth/logout/");
       toastSuccessNotify("Çıkış işlemi başarılı olmuştur.");
+      signOut(auth);
       dispatch(logoutSuccess());
       navigate("/");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Çıkış işlemi başarısız olmuştur.");
     }
   };
 

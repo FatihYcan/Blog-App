@@ -57,7 +57,7 @@ export default function Navbar() {
             </div>
             <div className="hidden md:block">
               <div className="ml-4 flex items-center md:ml-6">
-                {user && <h5 className="mr-2 capitalize">{user}</h5>}
+                {user && <h5 className="mr-2 text-white capitalize">{user}</h5>}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
@@ -66,7 +66,7 @@ export default function Navbar() {
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
-                        alt="user"
+                        alt={image}
                         src={image || avatar}
                         className="h-8 w-8 rounded-full"
                         referrerPolicy="no-referrer"
@@ -82,10 +82,7 @@ export default function Navbar() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items
-                      transition
-                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {!user && (
                         <>
                           <Menu.Item>
@@ -213,7 +210,9 @@ export default function Navbar() {
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium leading-none">
-                  {user && <h5 className="mr-2 capitalize">{user}</h5>}
+                  {user && (
+                    <h5 className="mr-2 text-white capitalize">{user}</h5>
+                  )}
                 </div>
               </div>
             </div>

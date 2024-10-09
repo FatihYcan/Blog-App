@@ -45,9 +45,9 @@ const RegisterForm = ({
   handleBlur,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [imagePreview, setImagePreview] = React.useState(null);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -125,14 +125,35 @@ const RegisterForm = ({
               id="image"
               type="file"
               variant="outlined"
-              value={values.image}
+              // value={values.image}
               accept="image/*"
-              onChange={handleChange}
+              onChange={(event) => {
+                // Formik'e dosya bilgisini iletmek için bir handler oluşturun
+                const file = event.currentTarget.files[0];
+                if (file) {
+                  const url = URL.createObjectURL(file);
+                  setImagePreview(url); 
+                  handleChange({
+                    target: {
+                      name: "image",
+                      value: url,
+                    },
+                  });
+                }
+              }}
               onBlur={handleBlur}
               error={touched.image && Boolean(errors.image)}
               helperText={errors.image}
             />
           </FormControl>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="Preview"
+              style={{ width: "100px", height: "100px", marginTop: "10px" }}
+            />
+          )}
+
           <FormControl fullWidth margin="normal">
             <TextField
               label="Bio"

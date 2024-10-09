@@ -62,10 +62,12 @@ const Register = () => {
               password: "",
             }}
             validationSchema={registerSchema}
-            onSubmit={(values, actions) => {
-              register(values);
-              console.log(values);
-              actions.resetForm();
+            onSubmit={async (values, actions) => {
+              const isRegistered = await register(values);
+
+              if (isRegistered) {
+                actions.resetForm();
+              }
               actions.setSubmitting(false);
             }}
             component={(props) => <RegisterForm {...props} />}

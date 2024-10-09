@@ -47,7 +47,7 @@ const LoginForm = ({
   };
 
   const handleForgotPassword = () => {
-    const users = JSON.parse(localStorage.getItem("users"));
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
     const foundUser = users.find((user) => user.email === values.email);
 
