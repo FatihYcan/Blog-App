@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -12,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import useAuthCalls from "../hooks/useAuthCalls";
 import LoginForm, { loginSchema } from "../components/auth/LoginForm";
 import { Formik } from "formik";
+import { useEffect, useState } from "react";
+import LoginSkeleton from "../components/auth/LoginSkeleton";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -47,6 +48,19 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 const Login = () => {
   const { login, signInProvider } = useAuthCalls();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // if (loading) {
+  //   return <LoginSkeleton />;
+  // }
 
   return (
     <SignInContainer direction="column" justifyContent="space-between">

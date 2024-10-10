@@ -2,7 +2,7 @@ import { Button, Grid, Pagination, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import useBlogCalls from "../hooks/useBlogCalls";
-import Card from "../components/blog/Card";
+import Cards from "../components/blog/Cards";
 import { Link } from "react-router-dom";
 import SkeletonCard from "../pages/SkeletonCard";
 
@@ -67,7 +67,7 @@ const MyBlogs = () => {
         ) : (
           <>
             {currentBlogs.map((item, i) => (
-              <Card {...item} key={i} />
+              <Cards {...item} key={i} />
             ))}
           </>
         )}

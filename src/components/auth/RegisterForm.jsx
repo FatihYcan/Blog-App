@@ -10,22 +10,13 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 
 export const registerSchema = object({
-  username: string()
-    .max(20, "Username 20 karakterden az olmalıdır.")
-    .required("Username zorunludur"),
-  firstName: string()
-    .max(20, "Firstname 20 karakterden az olmalıdır.")
-    .required("Firstname zorunludur"),
-  lastName: string()
-    .max(20, "Lastname 20 karakterden az olmalıdır.")
-    .required("Lastname zorunludur"),
-  email: string()
-    .email("Lütfen geçerli bir email giriniz.")
-    .required("Email zorunludur"),
+  username: string().max(20, "Username 20 karakterden az olmalıdır."),
+  firstName: string().max(20, "Firstname 20 karakterden az olmalıdır."),
+  lastName: string().max(20, "Lastname 20 karakterden az olmalıdır."),
+  email: string().email("Lütfen geçerli bir email giriniz."),
   // image: string().url("Geçerli bir URL giriniz."),
   bio: string(),
   password: string()
-    .required("Password zorunludur")
     .min(8, "Password en az 8 karakter olmalıdır")
     .max(20, "Password en fazla 20 karakter olmalıdır")
     .matches(/\d+/, "Password bir sayı içermelidir")
@@ -132,7 +123,7 @@ const RegisterForm = ({
                 const file = event.currentTarget.files[0];
                 if (file) {
                   const url = URL.createObjectURL(file);
-                  setImagePreview(url); 
+                  setImagePreview(url);
                   handleChange({
                     target: {
                       name: "image",

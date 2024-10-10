@@ -8,16 +8,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import ForgotPassword from "../../pages/ForgotPassword";
 import useAuthCalls from "../../hooks/useAuthCalls";
 import { toastErrorNotify } from "../../helper/ToastNotify";
 
 export const loginSchema = object({
-  email: string()
-    .email("Lütfen geçerli bir email giriniz.")
-    .required("Email zorunludur"),
+  email: string().email("Lütfen geçerli bir email giriniz."),
   password: string()
-    .required("Şifre zorunludur")
     .min(8, "Şifre en az 8 karakter olmalıdır")
     .max(20, "Şifre en fazla 20 karakter olmalıdır")
     .matches(/\d+/, "Şifre bir sayı içermelidir")
