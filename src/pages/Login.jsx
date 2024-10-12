@@ -58,9 +58,9 @@ const Login = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // if (loading) {
-  //   return <LoginSkeleton />;
-  // }
+  if (loading) {
+    return <LoginSkeleton />;
+  }
 
   return (
     <SignInContainer direction="column" justifyContent="space-between">

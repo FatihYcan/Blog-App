@@ -11,6 +11,9 @@ import useAuthCalls from "../hooks/useAuthCalls";
 import { Formik } from "formik";
 import RegisterForm, { registerSchema } from "../components/auth/RegisterForm";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import RegisterSkeleton from "../components/auth/RegisterSkeleton";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -39,6 +42,22 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 const Register = () => {
   const { register, signUpProvider } = useAuthCalls();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  
+  if (loading) {
+    return <RegisterSkeleton />;
+  }
+
+
   return (
     <>
       <SignUpContainer direction="column" justifyContent="space-between">

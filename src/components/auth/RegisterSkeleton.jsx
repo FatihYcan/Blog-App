@@ -26,12 +26,26 @@ const CardSkeleton = styled(Box)(({ theme }) => ({
     maxWidth: "450px",
   },
 }));
-
-const LoginSkeleton = () => {
+const RegisterSkeleton = () => {
   return (
     <SignInSkeletonContainer direction="column" justifyContent="space-between">
       <CardSkeleton>
         <Skeleton variant="text" width="60%" height={40} />
+        <Box sx={{ marginBottom: 2 }}>
+          <Skeleton variant="rectangular" height={56} />
+        </Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <Skeleton variant="rectangular" height={56} />
+        </Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <Skeleton variant="rectangular" height={56} />
+        </Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <Skeleton variant="rectangular" height={56} />
+        </Box>
+        <Box sx={{ marginBottom: 2 }}>
+          <Skeleton variant="rectangular" height={56} />
+        </Box>
         <Box sx={{ marginBottom: 2 }}>
           <Skeleton variant="rectangular" height={56} />
         </Box>
@@ -60,4 +74,4 @@ const LoginSkeleton = () => {
   );
 };
 
-export default LoginSkeleton;
+export default RegisterSkeleton;
