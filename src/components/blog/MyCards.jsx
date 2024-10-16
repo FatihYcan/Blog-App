@@ -63,7 +63,6 @@ const capitalizeFirstLetter = (string) => {
 export default function BlogCard({
   page,
   _id,
-  id,
   title,
   content,
   image,
@@ -72,10 +71,8 @@ export default function BlogCard({
   countOfVisitors,
   createdAt,
   category,
-  pagination,
 }) {
   const { userId } = useSelector((state) => state.auth);
-  const { postLikes, getBlogs } = useBlogCalls();
   const navigate = useNavigate();
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
@@ -89,15 +86,6 @@ export default function BlogCard({
   }, [image]);
 
   const isTallImage = imageSize.height > imageSize.width;
-
-  const handleLike = () => {
-    if (userId) {
-      postLikes("blogs", _id);
-      getBlogs(`/blogs?page=${page}&limit=${pagination.totalRecords}`);
-    } else {
-      navigate("/login");
-    }
-  };
 
   const handleDetail = () => {
     navigate(`/detail/${_id}`);
@@ -149,7 +137,7 @@ export default function BlogCard({
             }}
           >
             <Typography variant="caption">
-              <IconButton aria-label="add to favorites" onClick={handleLike}>
+              <IconButton aria-label="add to favorites">
                 {likes?.includes(userId) ? (
                   <FavoriteIcon color="error" />
                 ) : (

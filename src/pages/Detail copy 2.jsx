@@ -10,7 +10,7 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { Box, Button, Container, List } from "@mui/material";
+import { Box, Button, Container, Grid, List } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useBlogCalls from "../hooks/useBlogCalls";
@@ -22,15 +22,8 @@ import DeleteModal from "../components/blog/DeleteModal";
 export default function Detail() {
   const { _id } = useParams();
   const { details } = useSelector((state) => state.blog);
-  const {
-    userId,
-    username,
-    image: userImage,
-  } = useSelector((state) => state.auth);
+  const { userId, username } = useSelector((state) => state.auth);
   const { getDetails } = useBlogCalls();
-  let storedImage = localStorage.getItem("userImage");
-
-  storedImage = userImage;
 
   const [show, setShow] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -72,22 +65,28 @@ export default function Detail() {
   }, [details.image]);
 
   const name = details.userId ? details.userId.username : "";
-  const isTallImage = imageSize.height * 1.5 > imageSize.width;
+  const isTallImage = imageSize.height > imageSize.width;
+
+  console.log(isTallImage);
 
   return (
     <Container
+      fluid
       maxWidth="100%"
-      component="main"
+      // component="main"
       sx={{
         minHeight: "90vh",
-        marginBottom: "1.5rem",
+        marginBottom: "1rem",
+        // width: "100%",
       }}
     >
       <Box
         sx={{
-          maxWidth: "70%",
+          marginTop: "1rem",
+          maxWidth: "80%",
           margin: "auto",
           minHeight: "90vh",
+          border: "5px solid black",
         }}
       >
         <CardMedia
@@ -95,20 +94,18 @@ export default function Detail() {
           alt={title}
           image={image}
           sx={{
-            "@media (min-width:600px)": {
-              objectFit: isTallImage ? "contain" : "cover",
-              height: "375px",
-            },
-            marginTop: "1rem",
+            height: "50vh",
+            // height: "400px",
+            // width: "100%",
+            // objectFit: objectFit,
+            // border: "5px solid black",
+            // objectFit: isTallImage ? "contain" : "cover",
+            objectFit: "contain",
           }}
         />
         <CardHeader
           avatar={
-            storedImage ? (
-              <Avatar src={storedImage} alt={username} />
-            ) : (
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"></Avatar>
-            )
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"></Avatar>
           }
           title={name}
           subheader={

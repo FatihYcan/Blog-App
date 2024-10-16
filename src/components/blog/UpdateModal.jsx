@@ -1,4 +1,3 @@
-import * as React from "react";
 import Modal from "@mui/material/Modal";
 import {
   Box,
@@ -14,13 +13,14 @@ import {
 import useBlogCalls from "../../hooks/useBlogCalls";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function UpdateModal({ open, handleClose, data, setData }) {
   const { _id } = useParams();
   const { categories } = useSelector((state) => state.blog);
   const { getCategories, putBlogs, getDetails } = useBlogCalls();
 
-  React.useEffect(() => {
+  useEffect(() => {
     getCategories("categories");
   }, []);
 
@@ -31,8 +31,8 @@ export default function UpdateModal({ open, handleClose, data, setData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     putBlogs(_id, data);
-    handleClose();
     getDetails({ id: _id });
+    handleClose();
   };
 
   return (

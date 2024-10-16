@@ -12,6 +12,7 @@ const Dashboard = () => {
         flexDirection: "column",
         gap: 4,
         marginBottom: 2,
+        minHeight: "84vh",
       }}
     >
       <MainContent />

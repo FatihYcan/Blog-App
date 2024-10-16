@@ -122,14 +122,19 @@ const RegisterForm = ({
                 // Formik'e dosya bilgisini iletmek için bir handler oluşturun
                 const file = event.currentTarget.files[0];
                 if (file) {
-                  const url = URL.createObjectURL(file);
-                  setImagePreview(url);
-                  handleChange({
-                    target: {
-                      name: "image",
-                      value: url,
-                    },
-                  });
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    const base64data = reader.result;
+                    setImagePreview(base64data);
+                    localStorage.setItem("userImage", base64data);
+                    handleChange({
+                      target: {
+                        name: "image",
+                        value: base64data,
+                      },
+                    });
+                  };
+                  reader.readAsDataURL(file);
                 }
               }}
               onBlur={handleBlur}

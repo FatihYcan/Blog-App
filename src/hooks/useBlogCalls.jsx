@@ -69,7 +69,6 @@ const useBlogCalls = () => {
   const postLikes = async (url, post_id) => {
     try {
       await axiosWithToken.post(`/${url}/${post_id}/postLike/`, null);
-      getBlogs(url);
       dispatch(getLikeSuccess());
     } catch (error) {
       dispatch(fetchFail());

@@ -52,11 +52,9 @@ const Register = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  
   if (loading) {
     return <RegisterSkeleton />;
   }
-
 
   return (
     <>
@@ -83,6 +81,7 @@ const Register = () => {
             validationSchema={registerSchema}
             onSubmit={async (values, actions) => {
               const isRegistered = await register(values);
+           
 
               if (isRegistered) {
                 actions.resetForm();

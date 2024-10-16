@@ -1,9 +1,14 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useSelector } from "react-redux";
 import useBlogCalls from "../hooks/useBlogCalls";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import {
   Button,
   Container,
@@ -15,8 +20,29 @@ import Cards from "../components/blog/Cards";
 import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
 
+export function Search() {
+  return (
+    <FormControl sx={{ width: { xs: "100%", md: "25ch" } }} variant="outlined">
+      <OutlinedInput
+        size="small"
+        id="search"
+        placeholder="Search…"
+        sx={{ flexGrow: 1 }}
+        startAdornment={
+          <InputAdornment position="start" sx={{ color: "text.primary" }}>
+            <SearchRoundedIcon fontSize="small" />
+          </InputAdornment>
+        }
+        inputProps={{
+          "aria-label": "search",
+        }}
+      />
+    </FormControl>
+  );
+}
+
 export default function MainContent() {
-  const { blogs, pagination, categories, loading } = useSelector(
+  const { blogs, pagination, error, categories, loading } = useSelector(
     (state) => state.blog
   );
   const { getBlogs, getCategories } = useBlogCalls();
@@ -26,12 +52,11 @@ export default function MainContent() {
   const [filteredBlog, setFilteredBlog] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState();
   const blogsPerPage = 9;
-  const [categoriesSelected, setCategoriesSelected] = useState(true);
 
   useEffect(() => {
-    getBlogs(`/blogs?page=${page}&limit=${pagination.totalRecords}`);
+    getBlogs(`/blogs?page=${page}&limit=${blogsPerPage}`);
     getCategories("categories");
-  }, []);
+  }, [page]);
 
   const handlePage = (event, value) => {
     if (filteredCategory) {
@@ -42,11 +67,16 @@ export default function MainContent() {
   };
 
   const handleClick = async (categoryId) => {
-    setFilteredCategory(categoryId);
-    setPage(1);
-    setCurrentPage(1);
-    setCategoriesSelected(false);
-    await getBlogs(`/blogs?page=1&limit=${pagination.totalRecords}`);
+    try {
+      setFilteredCategory(categoryId);
+      setPage(1);
+      setCurrentPage(1);
+      await getBlogs(
+        `/blogs?page=1&limit=${pagination.totalRecords}&categoryId=${categoryId}`
+      );
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
   };
 
   useEffect(() => {
@@ -56,31 +86,45 @@ export default function MainContent() {
       );
       setFilteredBlog(filteredBlogs);
     }
-  }, [blogs, filteredCategory]);
+  }, [blogs, filteredCategory, currentPage]);
 
   const handleAll = () => {
-    setFilteredCategory(null);
-    setFilteredBlog([]);
-    setCategoriesSelected(true);
-    getBlogs(`/blogs?page=${page}&limit=${pagination.totalRecords}`);
+    setFilteredCategory(null); // Kategori filtresini sıfırla
+    setFilteredBlog([]); // Filtrelenmiş blogları sıfırla
+    getBlogs(`/blogs?page=1&limit=${blogsPerPage}`);
     setPage(1);
     setCurrentPage(1);
   };
 
-  const indexOfLastBlog =
-    filteredBlog.length > 0 ? currentPage * blogsPerPage : page * blogsPerPage;
+  const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs =
-    filteredBlog.length > 0
-      ? filteredBlog.slice(indexOfFirstBlog, indexOfLastBlog)
-      : blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const currentBlogs = filteredBlog.slice(indexOfFirstBlog, indexOfLastBlog);
 
   const isAllCategories = !filteredCategory;
 
-  const uniqueCategories = [...new Set(blogs.map((blog) => blog.categoryId))];
+  console.log(currentBlogs.length);
+  // console.log(filteredBlog);
+  console.log(filteredCategory);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+      }}
+    >
+      <Box
+        sx={{
+          display: { xs: "flex", sm: "none" },
+          flexDirection: "row",
+          gap: 1,
+          width: { xs: "100%", md: "fit-content" },
+          overflow: "auto",
+        }}
+      >
+        <Search />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -94,43 +138,36 @@ export default function MainContent() {
       >
         <Box
           sx={{
-            display: "flex",
+            display: "inline-flex",
             flexDirection: "row",
-            flexWrap: "wrap",
             gap: 3,
             overflow: "auto",
-            justifyContent: "center",
           }}
         >
-          <Chip
-            onClick={handleAll}
-            size="medium"
-            label="All categories"
-            sx={{
-              backgroundColor: categoriesSelected
-                ? "rgba(0, 0, 0, 0.08)"
-                : "transparent",
-              border: "none",
-            }}
-          />
-          {uniqueCategories.map((categoryId) => {
-            const category = categories.find((cat) => cat._id === categoryId);
-            return category ? (
-              <Chip
-                key={categoryId}
-                onClick={() => handleClick(category._id)}
-                size="medium"
-                label={category.name}
-                sx={{
-                  backgroundColor:
-                    filteredCategory === categoryId
-                      ? "rgba(0, 0, 0, 0.18)"
-                      : "transparent",
-                  border: "none",
-                }}
-              />
-            ) : null;
-          })}
+          <Chip onClick={handleAll} size="medium" label="All categories" />
+          {categories.map((item) => (
+            <Chip
+              key={item._id}
+              onClick={() => handleClick(item._id)}
+              size="medium"
+              label={item.name}
+              sx={{
+                backgroundColor: "transparent",
+                border: "none",
+              }}
+            />
+          ))}
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            flexDirection: "row",
+            gap: 1,
+            width: { xs: "100%", md: "fit-content" },
+            overflow: "auto",
+          }}
+        >
+          <Search />
         </Box>
       </Box>
       <Grid container rowSpacing={2} columnSpacing={2} justifyContent="center">
@@ -143,6 +180,29 @@ export default function MainContent() {
               <Skeleton variant="text" height={20} />
             </Grid>
           ))
+        ) : currentBlogs.length === 0 && filteredCategory ? ( // Sadece kategori seçildiğinde ve hiç blog yoksa
+          <Container
+            spacing={2}
+            sx={{
+              display: "flex",
+              flexFlow: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "69vh",
+            }}
+          >
+            <Typography
+              variant="h4"
+              color="error"
+              align="center"
+              marginBottom={3}
+            >
+              Blog Yoktur...
+            </Typography>
+            <Button variant="contained" onClick={() => navigate("/new-blog")}>
+              WRITE BLOG
+            </Button>
+          </Container>
         ) : blogs.length === 0 ? (
           <Container
             spacing={2}
@@ -167,12 +227,12 @@ export default function MainContent() {
             </Button>
           </Container>
         ) : (
-          currentBlogs.map((item) => {
+          (currentBlogs.length > 0 ? currentBlogs : blogs).map((item) => {
             const category = categories.find(
               (cat) => cat._id === item.categoryId
             );
             return (
-              <Cards key={item._id} {...item} category={category} page={page} pagination={pagination} />
+              <Cards key={item._id} {...item} category={category} page={page} />
             );
           })
         )}
@@ -189,7 +249,7 @@ export default function MainContent() {
         >
           <Pagination
             color="primary"
-            count={Math.ceil(blogs.length / blogsPerPage)}
+            count={pagination?.pages?.total}
             page={page}
             onChange={handlePage}
           />
