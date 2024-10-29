@@ -4,14 +4,20 @@ import { Box, Button, Typography } from "@mui/material";
 import useBlogCalls from "../../hooks/useBlogCalls";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function DeleteModal({ open, handleClose }) {
+export default function DeleteModal({ open, handleClose, editingCommentId }) {
   const { _id } = useParams();
-  const { deleteBlogs } = useBlogCalls();
+  const { deleteBlogs, deleteComments, getDetails } = useBlogCalls();
   const navigate = useNavigate();
 
-  const handleDelete = () => {
-    deleteBlogs(_id);
-    navigate(-1);
+  const handleDelete = async () => {
+    if (editingCommentId) {
+      await deleteComments(editingCommentId);
+      getDetails({ id: _id });
+      handleClose();
+    } else {
+      await deleteBlogs(_id);
+      navigate(-1);
+    }
   };
 
   return (
@@ -35,7 +41,9 @@ export default function DeleteModal({ open, handleClose }) {
         }}
       >
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Are you sure you want to delete this blog?
+          {editingCommentId
+            ? "Are you sure you want to delete this comment?"
+            : "Are you sure you want to delete this blog?"}
         </Typography>
         <Box marginTop={2}>
           <Button

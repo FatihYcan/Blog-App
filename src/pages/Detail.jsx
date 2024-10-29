@@ -89,6 +89,11 @@ export default function Detail() {
     setData({ comment: commentText });
   };
 
+  const handleDeleteComment = (commentId) => {
+    setEditingCommentId(commentId);
+    setDeleteOpen(true);
+  };
+
   return (
     <Container
       maxWidth="100%"
@@ -203,11 +208,12 @@ export default function Detail() {
                   bgcolor: "background.paper",
                 }}
               >
-                {comments?.map((item, i) => (
+                {comments?.map((item) => (
                   <CommentCard
                     key={item._id}
                     {...item}
                     onEdit={() => handleEditComment(item._id, item.comment)}
+                    onClick={() => handleDeleteComment(item._id)}
                   />
                 ))}
               </List>
@@ -224,6 +230,7 @@ export default function Detail() {
         <DeleteModal
           open={deleteOpen}
           handleClose={() => setDeleteOpen(false)}
+          editingCommentId={editingCommentId}
         />
       </Box>
     </Container>

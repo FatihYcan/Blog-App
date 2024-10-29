@@ -57,7 +57,6 @@ const useBlogCalls = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Blog silinemedi");
-      console.log(error);
     }
   };
 
@@ -115,6 +114,17 @@ const useBlogCalls = () => {
     }
   };
 
+  const deleteComments = async (post_id) => {
+    dispatch(fetchStart());
+    try {
+      await axiosWithToken.delete(`/comments/${post_id}/`);
+      toastSuccessNotify("Comment silinmiştir.");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Comment silinemedi");
+    }
+  };
+
   return {
     getBlogs,
     postBlogs,
@@ -126,6 +136,7 @@ const useBlogCalls = () => {
     getUsers,
     postComments,
     putComments,
+    deleteComments,
   };
 };
 

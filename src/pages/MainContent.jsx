@@ -50,11 +50,17 @@ export default function MainContent() {
   };
 
   useEffect(() => {
+    const allBlogs = blogs.filter(
+      (blog) => blog._id !== "67111b9f3ec8b710e80612f0"
+    );
+
     if (filteredCategory) {
-      const filteredBlogs = blogs.filter(
+      const filteredBlogs = allBlogs.filter(
         (blog) => blog.categoryId === filteredCategory
       );
       setFilteredBlog(filteredBlogs);
+    } else {
+      setFilteredBlog(allBlogs);
     }
   }, [blogs, filteredCategory]);
 
@@ -73,7 +79,9 @@ export default function MainContent() {
   const currentBlogs =
     filteredBlog.length > 0
       ? filteredBlog.slice(indexOfFirstBlog, indexOfLastBlog)
-      : blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+      : blogs
+          .filter((blog) => blog._id !== "67111b9f3ec8b710e80612f0")
+          .slice(indexOfFirstBlog, indexOfLastBlog);
 
   const isAllCategories = !filteredCategory;
 
@@ -116,19 +124,13 @@ export default function MainContent() {
           {uniqueCategories.map((categoryId) => {
             const category = categories.find((cat) => cat._id === categoryId);
 
-            const isSpecificBlog = currentBlogs.some(
-              (blog) =>
-                blog.categoryId === categoryId &&
-                blog._id === "67111b9f3ec8b710e80612f0"
-            );
-
-            const isOtherBlogPresent = currentBlogs.some(
+            const otherBlogs = blogs.some(
               (blog) =>
                 blog.categoryId === categoryId &&
                 blog._id !== "67111b9f3ec8b710e80612f0"
             );
 
-            return category && !(isSpecificBlog && !isOtherBlogPresent) ? (
+            return category && otherBlogs ? (
               <Chip
                 key={categoryId}
                 onClick={() => handleClick(category._id)}
@@ -180,24 +182,15 @@ export default function MainContent() {
             </Button>
           </Container>
         ) : (
-          currentBlogs.map((item) => {
-            if (item._id === "67111b9f3ec8b710e80612f0") {
-              return null;
-            }
-
-            const category = categories.find(
-              (cat) => cat._id === item.categoryId
-            );
-            return (
-              <Cards
-                key={item._id}
-                {...item}
-                category={category}
-                page={page}
-                pagination={pagination}
-              />
-            );
-          })
+          currentBlogs.map((item) => (
+            <Cards
+              key={item._id}
+              {...item}
+              category={categories.find((cat) => cat._id === item.categoryId)}
+              page={page}
+              pagination={pagination}
+            />
+          ))
         )}
       </Grid>
 

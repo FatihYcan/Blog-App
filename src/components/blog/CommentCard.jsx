@@ -8,7 +8,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 
-export default function CommentCard({ comment, createdAt, userId, onEdit }) {
+export default function CommentCard({
+  comment,
+  createdAt,
+  userId,
+  onEdit,
+  onClick,
+}) {
   const { username } = useSelector((state) => state.auth);
 
   const formattedDate = new Date(createdAt).toLocaleString("en-US", {
@@ -49,7 +55,7 @@ export default function CommentCard({ comment, createdAt, userId, onEdit }) {
               onClick={() => onEdit(comment)}
               sx={{ cursor: "pointer" }}
             />
-            <DeleteIcon color="error" />
+            <DeleteIcon color="error" onClick={onClick} />
           </ListItemSecondaryAction>
         )}
       </ListItem>
