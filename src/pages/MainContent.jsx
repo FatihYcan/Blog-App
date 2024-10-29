@@ -115,7 +115,20 @@ export default function MainContent() {
           />
           {uniqueCategories.map((categoryId) => {
             const category = categories.find((cat) => cat._id === categoryId);
-            return category ? (
+
+            const isSpecificBlog = currentBlogs.some(
+              (blog) =>
+                blog.categoryId === categoryId &&
+                blog._id === "67111b9f3ec8b710e80612f0"
+            );
+
+            const isOtherBlogPresent = currentBlogs.some(
+              (blog) =>
+                blog.categoryId === categoryId &&
+                blog._id !== "67111b9f3ec8b710e80612f0"
+            );
+
+            return category && !(isSpecificBlog && !isOtherBlogPresent) ? (
               <Chip
                 key={categoryId}
                 onClick={() => handleClick(category._id)}
@@ -168,11 +181,21 @@ export default function MainContent() {
           </Container>
         ) : (
           currentBlogs.map((item) => {
+            if (item._id === "67111b9f3ec8b710e80612f0") {
+              return null;
+            }
+
             const category = categories.find(
               (cat) => cat._id === item.categoryId
             );
             return (
-              <Cards key={item._id} {...item} category={category} page={page} pagination={pagination} />
+              <Cards
+                key={item._id}
+                {...item}
+                category={category}
+                page={page}
+                pagination={pagination}
+              />
             );
           })
         )}

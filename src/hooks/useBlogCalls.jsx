@@ -57,6 +57,7 @@ const useBlogCalls = () => {
     } catch (error) {
       dispatch(fetchFail());
       toastErrorNotify("Blog silinemedi");
+      console.log(error);
     }
   };
 
@@ -103,6 +104,17 @@ const useBlogCalls = () => {
     }
   };
 
+  const putComments = async (post_id, data) => {
+    dispatch(fetchStart());
+    try {
+      await axiosWithToken.put(`/comments/${post_id}`, data);
+      toastSuccessNotify("Comment güncellenmiştir..");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Comment güncellenememiştir.");
+    }
+  };
+
   return {
     getBlogs,
     postBlogs,
@@ -113,6 +125,7 @@ const useBlogCalls = () => {
     getDetails,
     getUsers,
     postComments,
+    putComments,
   };
 };
 

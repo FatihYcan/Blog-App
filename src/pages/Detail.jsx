@@ -18,24 +18,30 @@ import CommentCard from "../components/blog/CommentCard";
 import CommentForm from "../components/blog/CommentForm";
 import UpdateModal from "../components/blog/UpdateModal";
 import DeleteModal from "../components/blog/DeleteModal";
+import { styled } from "@mui/material/styles";
+
+const SyledCardContent = styled(CardContent)({
+  display: "flex",
+  flexDirection: "column",
+  gap: 4,
+  padding: 16,
+  flexGrow: 1,
+  "&:last-child": {
+    paddingBottom: 16,
+  },
+});
 
 export default function Detail() {
   const { _id } = useParams();
   const { details } = useSelector((state) => state.blog);
-  const {
-    userId,
-    username,
-    image: userImage,
-  } = useSelector((state) => state.auth);
+  const { userId, username } = useSelector((state) => state.auth);
   const { getDetails } = useBlogCalls();
-  let storedImage = localStorage.getItem("userImage");
-
-  storedImage = userImage;
 
   const [show, setShow] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [imageSize, setImageSize] = React.useState({ width: 0, height: 0 });
+  const [editingCommentId, setEditingCommentId] = React.useState(null);
 
   const handleOpen = () => {
     setData({
@@ -73,6 +79,15 @@ export default function Detail() {
 
   const name = details.userId ? details.userId.username : "";
   const isTallImage = imageSize.height * 1.5 > imageSize.width;
+  const formattedName =
+    name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+  const categoryName = details.categoryId ? details.categoryId.name : "";
+
+  const handleEditComment = (commentId, commentText) => {
+    setEditingCommentId(commentId);
+    setData({ comment: commentText });
+  };
 
   return (
     <Container
@@ -102,19 +117,24 @@ export default function Detail() {
             marginTop: "1rem",
           }}
         />
+
         <CardHeader
           avatar={
-            storedImage ? (
-              <Avatar src={storedImage} alt={username} />
-            ) : (
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"></Avatar>
-            )
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {formattedName.charAt(0)}
+            </Avatar>
           }
           title={name}
           subheader={
             details.createdAt && new Date(details.createdAt).toLocaleString()
           }
         />
+
+        <SyledCardContent>
+          <Typography variant="body2" color="text.secondary">
+            {categoryName}
+          </Typography>
+        </SyledCardContent>
 
         <CardContent>
           <Typography component="h1" variant="body1">
@@ -167,7 +187,14 @@ export default function Detail() {
 
         {show && (
           <>
-            <CommentForm />
+            <CommentForm
+              editingComment={
+                comments.find((comment) => comment._id === editingCommentId)
+                  ?.comment
+              }
+              editingCommentId={editingCommentId}
+              setEditingCommentId={setEditingCommentId}
+            />
             <Box>
               <List
                 sx={{
@@ -177,7 +204,11 @@ export default function Detail() {
                 }}
               >
                 {comments?.map((item, i) => (
-                  <CommentCard key={i} {...item} />
+                  <CommentCard
+                    key={item._id}
+                    {...item}
+                    onEdit={() => handleEditComment(item._id, item.comment)}
+                  />
                 ))}
               </List>
             </Box>

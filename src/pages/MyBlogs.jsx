@@ -24,7 +24,7 @@ const MyBlogs = () => {
   useEffect(() => {
     getUsers({ id: userId });
     getCategories("categories");
-  }, [userId]);
+  }, []);
 
   const indexOfLastBlog =
     filteredBlog.length > 0 ? currentPage * blogsPerPage : page * blogsPerPage;
@@ -72,8 +72,6 @@ const MyBlogs = () => {
 
   const uniqueCategories = [...new Set(users.map((user) => user.categoryId))];
 
-  console.log(categories);
-
   return (
     <Container
       maxWidth="xl"
@@ -108,17 +106,19 @@ const MyBlogs = () => {
               justifyContent: "center",
             }}
           >
-            <Chip
-              onClick={handleAll}
-              size="medium"
-              label="All categories"
-              sx={{
-                backgroundColor: categoriesSelected
-                  ? "rgba(0, 0, 0, 0.08)"
-                  : "transparent",
-                border: "none",
-              }}
-            />
+            {users.length > 0 && (
+              <Chip
+                onClick={handleAll}
+                size="medium"
+                label="All categories"
+                sx={{
+                  backgroundColor: categoriesSelected
+                    ? "rgba(0, 0, 0, 0.08)"
+                    : "transparent",
+                  border: "none",
+                }}
+              />
+            )}
             {uniqueCategories.map((categoryId) => {
               const category = categories.find((cat) => cat._id === categoryId);
               return category ? (

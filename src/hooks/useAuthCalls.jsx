@@ -92,6 +92,7 @@ const useAuthCalls = () => {
         lastName: result._tokenResponse.lastName,
         email: result.user.email,
         image: result.user.photoURL,
+        blogImg: result.user.photoURL,
         bio: "",
         password: randomPassword,
       };

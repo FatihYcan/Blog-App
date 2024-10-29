@@ -47,7 +47,6 @@ const blogSlice = createSlice({
 
     getUserSuccess: (state, { payload }) => {
       state.users = payload.apiData;
-      state.pagination = { ...payload.pagination, limit: 10 };
       state.loading = false;
       state.error = false;
     },

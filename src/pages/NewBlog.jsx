@@ -14,11 +14,10 @@ import useBlogCalls from "../hooks/useBlogCalls";
 import { useSelector } from "react-redux";
 
 const NewBlog = () => {
-  const { categories } = useSelector((state) => state.blog);
-  const { postBlogs, getCategories } = useBlogCalls();
-  const { userId } = useSelector((state) => state.auth);
+  const { categories, pagination } = useSelector((state) => state.blog);
+  const { postBlogs, getCategories, getBlogs } = useBlogCalls();
 
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     categoryId: "",
     title: "",
     content: "",
@@ -36,7 +35,9 @@ const NewBlog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postBlogs(data);
+    postBlogs(data).then(() => {
+      getBlogs(`/blogs?page=1&limit=${pagination.totalRecords}`);
+    });
     setData({
       categoryId: "",
       title: "",

@@ -3,8 +3,12 @@ import React from "react";
 import useBlogCalls from "../../hooks/useBlogCalls";
 import { useParams } from "react-router-dom";
 
-const CommentForm = () => {
-  const { postComments, getDetails } = useBlogCalls();
+const CommentForm = ({
+  editingCommentId,
+  setEditingCommentId,
+  editingComment,
+}) => {
+  const { postComments, getDetails, putComments } = useBlogCalls();
 
   const { _id } = useParams();
   const [data, setData] = React.useState({
@@ -18,15 +22,26 @@ const CommentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postComments("comments", data);
-    getDetails({ id: _id });
+    if (editingComment) {
+      await putComments(editingCommentId, { comment: data.comment });
+      setEditingCommentId(null);
+    } else {
+      await postComments("comments", data);
+    }
     setData({
       blogId: _id,
       comment: "",
     });
+    getDetails({ id: _id });
   };
 
-  // console.log(data);
+  React.useEffect(() => {
+    if (editingComment) {
+      setData({ blogId: _id, comment: editingComment });
+    } else {
+      setData({ blogId: _id, comment: "" });
+    }
+  }, [editingComment, _id]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -46,13 +61,13 @@ const CommentForm = () => {
           rows={2}
           value={data.comment}
           onChange={handleChange}
-          placeholder="Add a comment"
+          placeholder={editingComment ? "Update comment" : "Add a comment"}
           InputProps={{
             startAdornment: <InputAdornment position="start"></InputAdornment>,
           }}
         />
         <Button variant="contained" type="submit">
-          Add Comment
+          {editingComment ? "Update Comment" : "Add Comment"}
         </Button>
       </Box>
     </form>

@@ -126,7 +126,6 @@ const RegisterForm = ({
                   reader.onloadend = () => {
                     const base64data = reader.result;
                     setImagePreview(base64data);
-                    localStorage.setItem("userImage", base64data);
                     handleChange({
                       target: {
                         name: "image",

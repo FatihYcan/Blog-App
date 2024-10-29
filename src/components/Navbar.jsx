@@ -7,8 +7,6 @@ import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import useAuthCalls from "../hooks/useAuthCalls";
 import logo from "../img/logo.jpg";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const navigation = [
   { name: "DASHBORD", to: "/", current: false },
@@ -23,17 +21,6 @@ function classNames(...classes) {
 export default function Navbar() {
   const { user, image } = useSelector((state) => state.auth);
   const { logout } = useAuthCalls();
-  // const [img, setImg] = useState(null);
-
-  // useEffect(() => {
-  //   // localStorage'dan resim URL'sini oku
-  //   const storedImage = localStorage.getItem("userImage");
-  //   if (storedImage) {
-  //     setImg(storedImage);
-  //   }
-  // }, []);
-
-  // console.log(img);
 
   return (
     <>
@@ -79,8 +66,8 @@ export default function Navbar() {
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img
-                        alt={image}
-                        src={image || avatar}
+                        alt={user ? user : avatar}
+                        src={image ? image : avatar}
                         className="h-8 w-8 rounded-full"
                         referrerPolicy="no-referrer"
                       />
@@ -215,8 +202,8 @@ export default function Navbar() {
             <div className="flex items-center px-5">
               <div className="flex-shrink-0">
                 <img
-                  alt="user"
-                  src={image || avatar}
+                  alt={user ? user : avatar}
+                  src={image ? image : avatar}
                   className="h-8 w-8 rounded-full"
                   referrerPolicy="no-referrer"
                 />

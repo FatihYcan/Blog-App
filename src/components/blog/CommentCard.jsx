@@ -3,8 +3,14 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from "react-redux";
 
-export default function CommentCard({ comment, createdAt, userId }) {
+export default function CommentCard({ comment, createdAt, userId, onEdit }) {
+  const { username } = useSelector((state) => state.auth);
+
   const formattedDate = new Date(createdAt).toLocaleString("en-US", {
     weekday: "short",
     day: "numeric",
@@ -20,21 +26,33 @@ export default function CommentCard({ comment, createdAt, userId }) {
         <ListItemText
           primary={userId.username}
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 sx={{ display: "inline" }}
                 component="span"
-                variant="body4"
+                variant="body2"
                 color="text.secondary"
               >
                 {`${weekday} ${day} ${month} ${year}`}
               </Typography>
-              <Typography color="text.primary">{comment}</Typography>
-            </React.Fragment>
+              <br />
+              <Typography component="span" color="text.primary">
+                {comment}
+              </Typography>
+            </>
           }
         />
+        {userId.username === username && (
+          <ListItemSecondaryAction>
+            <EditIcon
+              color="primary"
+              onClick={() => onEdit(comment)}
+              sx={{ cursor: "pointer" }}
+            />
+            <DeleteIcon color="error" />
+          </ListItemSecondaryAction>
+        )}
       </ListItem>
-
       <Divider variant="middle" component="li" />
     </>
   );
