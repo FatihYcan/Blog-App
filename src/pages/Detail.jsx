@@ -11,7 +11,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { Box, Button, Container, List } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useBlogCalls from "../hooks/useBlogCalls";
 import CommentCard from "../components/blog/CommentCard";
@@ -35,7 +35,8 @@ export default function Detail() {
   const { _id } = useParams();
   const { details } = useSelector((state) => state.blog);
   const { userId, username } = useSelector((state) => state.auth);
-  const { getDetails } = useBlogCalls();
+  const { getDetails, postLikes } = useBlogCalls();
+  const navigate = useNavigate();
 
   const [show, setShow] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -94,6 +95,15 @@ export default function Detail() {
     setDeleteOpen(true);
   };
 
+  const handleLike = () => {
+    if (userId) {
+      postLikes("blogs", _id);
+      getDetails({ id: _id });
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <Container
       maxWidth="100%"
@@ -150,7 +160,7 @@ export default function Detail() {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" onClick={handleLike}>
             {likes?.includes(userId) ? (
               <FavoriteIcon color="error" />
             ) : (

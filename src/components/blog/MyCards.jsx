@@ -75,6 +75,7 @@ export default function BlogCard({
   const { userId } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const { getUsers, postLikes } = useBlogCalls();
 
   useEffect(() => {
     const img = new Image();
@@ -89,6 +90,11 @@ export default function BlogCard({
 
   const handleDetail = () => {
     navigate(`/detail/${_id}`);
+  };
+
+  const handleLike = () => {
+    postLikes("blogs", _id);
+    getUsers({ id: userId });
   };
 
   return (
@@ -137,7 +143,7 @@ export default function BlogCard({
             }}
           >
             <Typography variant="caption">
-              <IconButton aria-label="add to favorites">
+              <IconButton aria-label="add to favorites" onClick={handleLike}>
                 {likes?.includes(userId) ? (
                   <FavoriteIcon color="error" />
                 ) : (
