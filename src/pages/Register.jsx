@@ -75,13 +75,11 @@ const Register = () => {
               lastName: "",
               email: "",
               image: "",
-              bio: "",
               password: "",
             }}
             validationSchema={registerSchema}
             onSubmit={async (values, actions) => {
               const isRegistered = await register(values);
-           
 
               if (isRegistered) {
                 actions.resetForm();

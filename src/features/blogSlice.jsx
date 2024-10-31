@@ -34,9 +34,10 @@ const blogSlice = createSlice({
       state.error = false;
     },
 
-    getLikeSuccess: (state) => {
+    getLikeSuccess: (state, { payload }) => {
       state.loading = false;
       state.error = false;
+      state.likes = payload.countOfLikes;
     },
 
     getDetailSuccess: (state, { payload }) => {

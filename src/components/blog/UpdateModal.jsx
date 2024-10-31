@@ -28,10 +28,10 @@ export default function UpdateModal({ open, handleClose, data, setData }) {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    putBlogs(_id, data);
-    getDetails({ id: _id });
+    await putBlogs(_id, data);
+    await getDetails({ id: _id });
     handleClose();
   };
 

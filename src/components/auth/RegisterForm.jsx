@@ -15,7 +15,6 @@ export const registerSchema = object({
   lastName: string().max(20, "Lastname 20 karakterden az olmalıdır."),
   email: string().email("Lütfen geçerli bir email giriniz."),
   // image: string().url("Geçerli bir URL giriniz."),
-  bio: string(),
   password: string()
     .min(8, "Password en az 8 karakter olmalıdır")
     .max(20, "Password en fazla 20 karakter olmalıdır")
@@ -119,7 +118,7 @@ const RegisterForm = ({
               // value={values.image}
               accept="image/*"
               onChange={(event) => {
-                // Formik'e dosya bilgisini iletmek için bir handler oluşturun
+                // Formik'e dosya bilgisini iletmek için bir handler oluşturma
                 const file = event.currentTarget.files[0];
                 if (file) {
                   const reader = new FileReader();
@@ -149,20 +148,6 @@ const RegisterForm = ({
             />
           )}
 
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Bio"
-              name="bio"
-              id="bio"
-              type="text"
-              variant="outlined"
-              value={values.bio}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.bio && Boolean(errors.bio)}
-              helperText={errors.bio}
-            />
-          </FormControl>
           <FormControl fullWidth margin="normal">
             <TextField
               label="Password"

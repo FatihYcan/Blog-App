@@ -68,17 +68,26 @@ const useBlogCalls = () => {
 
   const postLikes = async (url, post_id) => {
     try {
-      await axiosWithToken.post(`/${url}/${post_id}/postLike/`, null);
-      dispatch(getLikeSuccess());
+      const { data } = await axiosWithToken.post(
+        `/${url}/${post_id}/postLike/`,
+        null
+      );
+      console.log(data);
+      dispatch(getLikeSuccess(data));
     } catch (error) {
       dispatch(fetchFail());
     }
   };
 
   const getDetails = async (post) => {
-    const { data } = await axiosWithToken(`/blogs/${post.id}/`);
-    const apiData = data.data;
-    dispatch(getDetailSuccess({ apiData }));
+    dispatch(fetchStart());
+    try {
+      const { data } = await axiosWithToken(`/blogs/${post.id}/`);
+      const apiData = data.data;
+      dispatch(getDetailSuccess({ apiData }));
+    } catch (error) {
+      dispatch(fetchFail());
+    }
   };
 
   const getUsers = async (user) => {

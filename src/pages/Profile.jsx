@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, CardActionArea, Container } from "@mui/material";
 import { useSelector } from "react-redux";
+import avatar from "../assets/icons/avatar.png";
 
 export default function Profile() {
   const { username, email, image } = useSelector((state) => state.auth);
@@ -31,7 +32,7 @@ export default function Profile() {
             <CardMedia
               component="img"
               alt={username}
-              image={image}
+              src={image ? image : avatar}
               sx={{ height: "350px", objectFit: "contain" }}
             />
             <CardContent sx={{ textAlign: "center" }}>

@@ -33,7 +33,7 @@ const SyledCardContent = styled(CardContent)({
 
 export default function Detail() {
   const { _id } = useParams();
-  const { details } = useSelector((state) => state.blog);
+  const { details, likes: like } = useSelector((state) => state.blog);
   const { userId, username } = useSelector((state) => state.auth);
   const { getDetails, postLikes } = useBlogCalls();
   const navigate = useNavigate();
@@ -43,6 +43,7 @@ export default function Detail() {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [imageSize, setImageSize] = React.useState({ width: 0, height: 0 });
   const [editingCommentId, setEditingCommentId] = React.useState(null);
+  const [deletingCommentId, setDeletingCommentId] = React.useState(null);
 
   const handleOpen = () => {
     setData({
@@ -76,7 +77,7 @@ export default function Detail() {
     img.onload = () => {
       setImageSize({ width: img.width, height: img.height });
     };
-  }, [details.image]);
+  }, [details.image, like]);
 
   const name = details.userId ? details.userId.username : "";
   const isTallImage = imageSize.height * 1.5 > imageSize.width;
@@ -91,14 +92,13 @@ export default function Detail() {
   };
 
   const handleDeleteComment = (commentId) => {
-    setEditingCommentId(commentId);
+    setDeletingCommentId(commentId);
     setDeleteOpen(true);
   };
 
   const handleLike = () => {
     if (userId) {
       postLikes("blogs", _id);
-      getDetails({ id: _id });
     } else {
       navigate("/login");
     }
@@ -240,7 +240,7 @@ export default function Detail() {
         <DeleteModal
           open={deleteOpen}
           handleClose={() => setDeleteOpen(false)}
-          editingCommentId={editingCommentId}
+          deletingCommentId={deletingCommentId}
         />
       </Box>
     </Container>
