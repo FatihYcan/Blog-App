@@ -16,7 +16,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
 
 export default function MainContent() {
-  const { blogs, pagination, categories, loading } = useSelector(
+  const { blogs, pagination, categories, loading, likes } = useSelector(
     (state) => state.blog
   );
   const { getBlogs, getCategories } = useBlogCalls();
@@ -25,13 +25,13 @@ export default function MainContent() {
   const navigate = useNavigate();
   const [filteredBlog, setFilteredBlog] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState();
-  const blogsPerPage = 9;
+  const blogsPerPage = 9; // Sayfa başına gösterilecek blog sayısı
   const [categoriesSelected, setCategoriesSelected] = useState(true);
 
   useEffect(() => {
-    getBlogs(`/blogs?page=${page}&limit=${pagination.totalRecords}`);
+    getBlogs(`/blogs?page=1&limit=${pagination.totalRecords}`);
     getCategories("categories");
-  }, []);
+  }, [likes]);
 
   const handlePage = (event, value) => {
     if (filteredCategory) {
@@ -50,9 +50,7 @@ export default function MainContent() {
   };
 
   useEffect(() => {
-    const allBlogs = blogs.filter(
-      (blog) => blog._id !== "67111b9f3ec8b710e80612f0"
-    );
+    const allBlogs = blogs;
 
     if (filteredCategory) {
       const filteredBlogs = allBlogs.filter(
@@ -73,19 +71,16 @@ export default function MainContent() {
     setCurrentPage(1);
   };
 
-  const indexOfLastBlog =
-    filteredBlog.length > 0 ? currentPage * blogsPerPage : page * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs =
-    filteredBlog.length > 0
-      ? filteredBlog.slice(indexOfFirstBlog, indexOfLastBlog)
-      : blogs
-          .filter((blog) => blog._id !== "67111b9f3ec8b710e80612f0")
-          .slice(indexOfFirstBlog, indexOfLastBlog);
-
   const isAllCategories = !filteredCategory;
 
   const uniqueCategories = [...new Set(blogs.map((blog) => blog.categoryId))];
+
+  const displayedBlogs = filteredCategory
+    ? filteredBlog.slice(
+        (currentPage - 1) * blogsPerPage,
+        currentPage * blogsPerPage
+      )
+    : blogs.slice((page - 1) * blogsPerPage, page * blogsPerPage);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -125,9 +120,7 @@ export default function MainContent() {
             const category = categories.find((cat) => cat._id === categoryId);
 
             const otherBlogs = blogs.some(
-              (blog) =>
-                blog.categoryId === categoryId &&
-                blog._id !== "67111b9f3ec8b710e80612f0"
+              (blog) => blog.categoryId === categoryId
             );
 
             return category && otherBlogs ? (
@@ -148,6 +141,7 @@ export default function MainContent() {
           })}
         </Box>
       </Box>
+
       <Grid container rowSpacing={2} columnSpacing={2} justifyContent="center">
         {loading ? (
           Array.from({ length: 6 }).map((_, index) => (
@@ -158,7 +152,7 @@ export default function MainContent() {
               <Skeleton variant="text" height={20} />
             </Grid>
           ))
-        ) : blogs.length === 0 ? (
+        ) : displayedBlogs.length === 0 ? (
           <Container
             spacing={2}
             sx={{
@@ -182,7 +176,7 @@ export default function MainContent() {
             </Button>
           </Container>
         ) : (
-          currentBlogs.map((item) => (
+          displayedBlogs.map((item) => (
             <Cards
               key={item._id}
               {...item}
@@ -194,7 +188,7 @@ export default function MainContent() {
         )}
       </Grid>
 
-      {isAllCategories && pagination.totalRecords > 9 && (
+      {isAllCategories && pagination.totalRecords > 10 && (
         <Stack
           spacing={2}
           sx={{

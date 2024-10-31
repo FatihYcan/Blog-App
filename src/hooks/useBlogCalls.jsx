@@ -16,10 +16,12 @@ const useBlogCalls = () => {
   const dispatch = useDispatch();
 
   const getBlogs = async (url) => {
-    dispatch(fetchStart());
+    // dispatch(fetchStart());
     try {
       const { data } = await axiosPublic(url);
-      const apiData = data.data;
+      const apiData = data.data.filter(
+        (blog) => blog._id !== "67111b9f3ec8b710e80612f0"
+      );
       const pagination = data.details;
       dispatch(getBlogSuccess({ apiData, pagination }));
     } catch (error) {
@@ -72,7 +74,6 @@ const useBlogCalls = () => {
         `/${url}/${post_id}/postLike/`,
         null
       );
-      console.log(data);
       dispatch(getLikeSuccess(data));
     } catch (error) {
       dispatch(fetchFail());
