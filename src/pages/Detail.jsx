@@ -241,6 +241,7 @@ export default function Detail() {
           open={deleteOpen}
           handleClose={() => setDeleteOpen(false)}
           deletingCommentId={deletingCommentId}
+          setDeletingCommentId={setDeletingCommentId}
         />
       </Box>
     </Container>

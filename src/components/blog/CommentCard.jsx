@@ -55,7 +55,11 @@ export default function CommentCard({
               onClick={() => onEdit(comment)}
               sx={{ cursor: "pointer" }}
             />
-            <DeleteIcon color="error" onClick={onClick} />
+            <DeleteIcon
+              color="error"
+              onClick={onClick}
+              sx={{ cursor: "pointer" }}
+            />
           </ListItemSecondaryAction>
         )}
       </ListItem>

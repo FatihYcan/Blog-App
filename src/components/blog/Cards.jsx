@@ -63,7 +63,6 @@ const capitalizeFirstLetter = (string) => {
 export default function BlogCard({
   page,
   _id,
-  id,
   title,
   content,
   image,

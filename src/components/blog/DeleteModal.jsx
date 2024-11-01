@@ -4,7 +4,12 @@ import { Box, Button, Typography } from "@mui/material";
 import useBlogCalls from "../../hooks/useBlogCalls";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function DeleteModal({ open, handleClose, deletingCommentId }) {
+export default function DeleteModal({
+  open,
+  handleClose,
+  deletingCommentId,
+  setDeletingCommentId,
+}) {
   const { _id } = useParams();
   const { deleteBlogs, deleteComments, getDetails } = useBlogCalls();
   const navigate = useNavigate();
@@ -13,6 +18,7 @@ export default function DeleteModal({ open, handleClose, deletingCommentId }) {
     if (deletingCommentId) {
       await deleteComments(deletingCommentId);
       getDetails({ id: _id });
+      setDeletingCommentId(null);
       handleClose();
     } else {
       await deleteBlogs(_id);

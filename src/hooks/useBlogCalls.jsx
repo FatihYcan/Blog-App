@@ -16,7 +16,6 @@ const useBlogCalls = () => {
   const dispatch = useDispatch();
 
   const getBlogs = async (url) => {
-    // dispatch(fetchStart());
     try {
       const { data } = await axiosPublic(url);
       const apiData = data.data.filter(
@@ -117,10 +116,10 @@ const useBlogCalls = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.put(`/comments/${post_id}`, data);
-      toastSuccessNotify("Comment güncellenmiştir..");
+      toastSuccessNotify("Yorum güncellenmiştir..");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Comment güncellenememiştir.");
+      toastErrorNotify("Yorum güncellenememiştir.");
     }
   };
 
@@ -128,10 +127,10 @@ const useBlogCalls = () => {
     dispatch(fetchStart());
     try {
       await axiosWithToken.delete(`/comments/${post_id}/`);
-      toastSuccessNotify("Comment silinmiştir.");
+      toastSuccessNotify("Yorum silinmiştir.");
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify("Comment silinemedi");
+      toastErrorNotify("Yorum silinememiştir");
     }
   };
 
