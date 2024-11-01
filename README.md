@@ -284,3 +284,90 @@ Bu proje, kullanıcıların blog yazıları oluşturup paylaşabilecekleri bir b
 - **Formik ve Yup**: Form yönetimi ve doğrulama için
 
 ------------
+
+# Blog Uygulaması
+
+## Genel Bakış
+
+Blog Uygulaması, kullanıcıların blog gönderileri oluşturmasına, okumasına, güncellemesine ve silmesine olanak tanıyan tam özellikli bir blog platformudur. Kullanıcılar, kayıt olma, giriş yapma ve içeriklerini kolayca yönetme işlemlerini gerçekleştirebilir. Uygulama, kimlik doğrulama için Firebase ve API çağrıları için Axios kullanmaktadır.
+
+## Özellikler
+
+- **Kullanıcı Kimlik Doğrulama**: Kullanıcılar, e-posta ve şifre ile veya Google kimlik doğrulaması ile kayıt olabilir ve giriş yapabilir.
+- **Blog Yönetimi**: Kullanıcı dostu bir arayüz ile blog gönderileri oluşturma, güncelleme ve silme işlemleri.
+- **Kategori Yönetimi**: Blog gönderilerine daha iyi bir organizasyon için kategori atama.
+- **Yorumlar**: Kullanıcılar blog gönderilerine yorum yapabilir.
+- **Beğeni Sistemi**: Kullanıcılar gönderileri beğenerek takdirlerini gösterebilir.
+
+## Kullanılan Teknolojiler
+
+- React.js
+- Redux Toolkit
+- Firebase Kimlik Doğrulama
+- Axios
+- Material-UI
+- Formik ve Yup ile form yönetimi ve doğrulama
+
+-----------------
+
+# Blog Uygulaması
+
+## Genel Bakış
+
+Blog Uygulaması, kullanıcıların blog gönderileri oluşturmasına, okumasına, güncellemesine ve silmesine olanak tanıyan tam özellikli bir blog platformudur. Kullanıcılar, kayıt olma, giriş yapma ve içeriklerini kolayca yönetme işlemlerini gerçekleştirebilir. Uygulama, kimlik doğrulama için Firebase ve API çağrıları için Axios kullanmaktadır.
+
+## Özellikler
+
+- **Kullanıcı Kimlik Doğrulama**: Kullanıcılar, e-posta ve şifre ile veya Google kimlik doğrulaması ile kayıt olabilir ve giriş yapabilir.
+- **Blog Yönetimi**: Kullanıcı dostu bir arayüz ile blog gönderileri oluşturma, güncelleme ve silme işlemleri.
+- **Kategori Yönetimi**: Blog gönderilerine daha iyi bir organizasyon için kategori atama.
+- **Yorumlar**: Kullanıcılar blog gönderilerine yorum yapabilir.
+- **Beğeni Sistemi**: Kullanıcılar gönderileri beğenerek takdirlerini gösterebilir.
+
+## Kullanılan Teknolojiler
+
+- React.js
+- Redux Toolkit
+- Firebase Kimlik Doğrulama
+- Axios
+- Material-UI
+- Formik ve Yup ile form yönetimi ve doğrulama
+
+----------
+
+# Blog Uygulaması
+
+## Genel Bakış
+
+Blog Uygulaması, kullanıcıların blog yazıları oluşturmasına, okumasına, güncellemesine ve silmesine olanak tanıyan bir web uygulamasıdır. Kullanıcı kimlik doğrulaması, yorum yapma ve beğenme işlevsellikleri ile içerik paylaşımını ve etkileşimi artıran interaktif bir platformdur.
+
+## Özellikler
+
+- **Kullanıcı Kimlik Doğrulama**: Kullanıcılar kayıt olabilir, giriş yapabilir ve profillerini yönetebilir.
+- **Blog Yönetimi**: Kullanıcılar yeni blog yazıları oluşturabilir, mevcut yazıları düzenleyebilir ve silebilir.
+- **Yorumlar**: Kullanıcılar blog yazılarına yorum yapabilir, yorumlarını düzenleyebilir veya silebilir.
+- **Beğenme Sistemi**: Kullanıcılar blog yazılarını beğenebilir, etkileşimlerini görsel olarak geri bildirim alarak takip edebilir.
+- **Duyarlı Tasarım**: Uygulama, hem masaüstü hem de mobil cihazlarda sorunsuz bir şekilde çalışacak şekilde tasarlanmıştır.
+
+## Teknoloji Yığını
+
+- **Frontend**:
+  - React: Kullanıcı arayüzü bileşenleri için.
+  - Material-UI (MUI): UI bileşenleri için.
+  - Tailwind CSS: Özel stil ve duyarlı tasarım için.
+  - Headless UI: Açılır menüler ve diğer UI bileşenleri için.
+  - React Router: Sayfalar arasında yönlendirme için.
+
+- **Durum Yönetimi**:
+  - Redux: Uygulama durumu ve kullanıcı kimlik doğrulaması yönetimi için.
+
+- **Backend**:
+  - Node.js: Sunucu tarafı için.
+  - Express.js: API geliştirmek için.
+  - MongoDB: Veritabanı olarak.
+
+- **Diğer Araçlar**:
+  - Axios: API çağrıları için.
+  - Redux Thunk: Asenkron işlemler için.
+  - JWT (JSON Web Token): Kullanıcı kimlik doğrulaması için.
+
