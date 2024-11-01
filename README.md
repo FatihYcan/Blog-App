@@ -26,6 +26,8 @@ This project is a blogging application where users can create and share blog pos
 - React-Toastify
 - Redux Persist
 - Formic and Yup
+- [BLOG API](https://blog-api-js.fullstack.clarusway.com/)
+
 
 # Blog App
 
@@ -55,3 +57,5 @@ Bu proje, kullanıcıların blog yazıları oluşturup paylaşabilecekleri bir b
 - React-Toastify
 - Redux Persist
 - Formik ve Yup
+- [BLOG API](https://blog-api-js.fullstack.clarusway.com/)
+
