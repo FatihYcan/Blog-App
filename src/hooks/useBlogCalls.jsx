@@ -16,6 +16,7 @@ const useBlogCalls = () => {
   const dispatch = useDispatch();
 
   const getBlogs = async (url) => {
+    // dispatch(fetchStart());
     try {
       const { data } = await axiosPublic(url);
       const apiData = data.data.filter(

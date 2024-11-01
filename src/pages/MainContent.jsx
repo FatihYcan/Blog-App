@@ -4,16 +4,10 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 import useBlogCalls from "../hooks/useBlogCalls";
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Container,
-  Pagination,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import Cards from "../components/blog/Cards";
 import Skeleton from "@mui/material/Skeleton";
-import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function MainContent() {
   const { blogs, pagination, categories, loading, likes } = useSelector(
@@ -22,10 +16,9 @@ export default function MainContent() {
   const { getBlogs, getCategories } = useBlogCalls();
   const [page, setPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const navigate = useNavigate();
   const [filteredBlog, setFilteredBlog] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState();
-  const blogsPerPage = 9; // Sayfa başına gösterilecek blog sayısı
+  const blogsPerPage = 9;
   const [categoriesSelected, setCategoriesSelected] = useState(true);
 
   useEffect(() => {
@@ -84,6 +77,11 @@ export default function MainContent() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+       <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - Home</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",
@@ -143,49 +141,24 @@ export default function MainContent() {
       </Box>
 
       <Grid container rowSpacing={2} columnSpacing={2} justifyContent="center">
-        {loading ? (
-          Array.from({ length: 6 }).map((_, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Skeleton variant="rectangular" height={250} />
-              <Skeleton variant="text" height={40} />
-              <Skeleton variant="text" height={20} />
-              <Skeleton variant="text" height={20} />
-            </Grid>
-          ))
-        ) : displayedBlogs.length === 0 ? (
-          <Container
-            spacing={2}
-            sx={{
-              display: "flex",
-              flexFlow: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "69vh",
-            }}
-          >
-            <Typography
-              variant="h4"
-              color="error"
-              align="center"
-              marginBottom={3}
-            >
-              Blog Not Found...
-            </Typography>
-            <Button variant="contained" onClick={() => navigate("/new-blog")}>
-              WRITE BLOG
-            </Button>
-          </Container>
-        ) : (
-          displayedBlogs.map((item) => (
-            <Cards
-              key={item._id}
-              {...item}
-              category={categories.find((cat) => cat._id === item.categoryId)}
-              page={page}
-              pagination={pagination}
-            />
-          ))
-        )}
+        {loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Skeleton variant="rectangular" height={250} />
+                <Skeleton variant="text" height={40} />
+                <Skeleton variant="text" height={20} />
+                <Skeleton variant="text" height={20} />
+              </Grid>
+            ))
+          : displayedBlogs.map((item) => (
+              <Cards
+                key={item._id}
+                {...item}
+                category={categories.find((cat) => cat._id === item.categoryId)}
+                page={page}
+                pagination={pagination}
+              />
+            ))}
       </Grid>
 
       {isAllCategories && pagination.totalRecords > 10 && (

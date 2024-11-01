@@ -8,11 +8,14 @@ import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Skeleton from "@mui/material/Skeleton";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const MyBlogs = () => {
   const { getUsers, getCategories } = useBlogCalls();
   const { userId } = useSelector((state) => state.auth);
-  const { users, loading, categories } = useSelector((state) => state.blog);
+  const { users, loading, categories, likes } = useSelector(
+    (state) => state.blog
+  );
   const [filteredBlog, setFilteredBlog] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState();
   const [categoriesSelected, setCategoriesSelected] = useState(true);
@@ -24,7 +27,7 @@ const MyBlogs = () => {
   useEffect(() => {
     getUsers({ id: userId });
     getCategories("categories");
-  }, []);
+  }, [likes]);
 
   const indexOfLastBlog =
     filteredBlog.length > 0 ? currentPage * blogsPerPage : page * blogsPerPage;
@@ -84,6 +87,11 @@ const MyBlogs = () => {
         minHeight: "84vh",
       }}
     >
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - My Blogs</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <Box
           sx={{

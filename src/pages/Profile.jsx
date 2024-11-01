@@ -5,12 +5,18 @@ import Typography from "@mui/material/Typography";
 import { Box, CardActionArea, Container } from "@mui/material";
 import { useSelector } from "react-redux";
 import avatar from "../assets/icons/avatar.png";
+import { Helmet } from "react-helmet";
 
 export default function Profile() {
   const { username, email, image } = useSelector((state) => state.auth);
 
   return (
-    <Container maxWidth="lg" sx={{ minHeight: "90vh" }}>
+    <Container maxWidth="lg" sx={{ minHeight: "84vh" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - Profile</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",

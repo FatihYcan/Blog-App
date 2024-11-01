@@ -12,6 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import useBlogCalls from "../hooks/useBlogCalls";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
 const NewBlog = () => {
   const { categories, pagination } = useSelector((state) => state.blog);
@@ -48,7 +49,12 @@ const NewBlog = () => {
   };
 
   return (
-    <Container maxWidth="xs" sx={{ minHeight: "81vh" }}>
+    <Container maxWidth="xs" sx={{ minHeight: "84vh" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - New Blog</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Box
         sx={{
           display: "flex",

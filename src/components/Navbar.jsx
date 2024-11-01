@@ -7,6 +7,7 @@ import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import useAuthCalls from "../hooks/useAuthCalls";
 import logo from "../img/logo.jpg";
+import blog from "../img/blog-app.png";
 
 const navigation = [
   { name: "DASHBORD", to: "/", current: false },
@@ -26,14 +27,14 @@ export default function Navbar() {
     <>
       <Disclosure as="nav" className="bg-gray-800 fixed w-full z-20 top-0">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-20 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <NavDropdown.Item
                   className="md:text-2xl font-semibold cursor-pointer"
                   href="/"
                 >
-                  <img className="h-8 w-auto" src={logo} alt={logo} />
+                  <img className="h-12 w-auto" src={blog} alt={logo} />
                 </NavDropdown.Item>
               </div>
               <div className="hidden md:block">
@@ -252,7 +253,7 @@ export default function Navbar() {
           </div>
         </Disclosure.Panel>
       </Disclosure>
-      <div className="h-[80px]"></div>
+      <div className="h-[100px]"></div>
     </>
   );
 }

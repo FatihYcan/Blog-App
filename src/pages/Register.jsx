@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import RegisterSkeleton from "../components/auth/RegisterSkeleton";
+import { Helmet } from "react-helmet";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -57,67 +58,70 @@ const Register = () => {
   }
 
   return (
-    <>
-      <SignUpContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+    <SignUpContainer direction="column" justifyContent="space-between">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - Register</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
+      <Card variant="outlined">
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+        >
+          Sign up
+        </Typography>
+
+        <Formik
+          initialValues={{
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            image: "",
+            password: "",
+          }}
+          validationSchema={registerSchema}
+          onSubmit={async (values, actions) => {
+            const isRegistered = await register(values);
+
+            if (isRegistered) {
+              actions.resetForm();
+            }
+            actions.setSubmitting(false);
+          }}
+          component={(props) => <RegisterForm {...props} />}
+        ></Formik>
+
+        <Box sx={{ textAlign: "center" }}>
+          Already have an account?{" "}
+          <Link
+            onClick={() => navigate("/login")}
+            style={{
+              color: "red",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
           >
-            Sign up
-          </Typography>
-
-          <Formik
-            initialValues={{
-              username: "",
-              firstName: "",
-              lastName: "",
-              email: "",
-              image: "",
-              password: "",
-            }}
-            validationSchema={registerSchema}
-            onSubmit={async (values, actions) => {
-              const isRegistered = await register(values);
-
-              if (isRegistered) {
-                actions.resetForm();
-              }
-              actions.setSubmitting(false);
-            }}
-            component={(props) => <RegisterForm {...props} />}
-          ></Formik>
-
-          <Box sx={{ textAlign: "center" }}>
-            Already have an account?{" "}
-            <Link
-              onClick={() => navigate("/login")}
-              style={{
-                color: "red",
-                cursor: "pointer",
-                textDecoration: "none",
-              }}
-            >
-              Sign in
-            </Link>
-          </Box>
-          <Divider>
-            <Typography sx={{ color: "text.secondary" }}>or</Typography>
-          </Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={signUpProvider}
-              startIcon={<GoogleIcon color="currentColor" />}
-            >
-              Sign up with Google
-            </Button>
-          </Box>
-        </Card>
-      </SignUpContainer>
-    </>
+            Sign in
+          </Link>
+        </Box>
+        <Divider>
+          <Typography sx={{ color: "text.secondary" }}>or</Typography>
+        </Divider>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={signUpProvider}
+            startIcon={<GoogleIcon color="currentColor" />}
+          >
+            Sign up with Google
+          </Button>
+        </Box>
+      </Card>
+    </SignUpContainer>
   );
 };
 

@@ -8,6 +8,7 @@ import image from "../img/logo.jpg";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { styled } from "@mui/system";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { Helmet } from "react-helmet";
 
 const StyledLinkedInIcon = styled(LinkedInIcon)({
   fontSize: "2.5rem",
@@ -19,7 +20,12 @@ const StyledLinkedInIcon = styled(LinkedInIcon)({
 
 export default function About() {
   return (
-    <Box sx={{ minHeight: "76vh" }}>
+    <Box sx={{ minHeight: "84vh" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - About</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Card
         elevation={24}
         sx={{

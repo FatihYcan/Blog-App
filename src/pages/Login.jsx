@@ -13,6 +13,7 @@ import LoginForm, { loginSchema } from "../components/auth/LoginForm";
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import LoginSkeleton from "../components/auth/LoginSkeleton";
+import { Helmet } from "react-helmet";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -64,6 +65,11 @@ const Login = () => {
 
   return (
     <SignInContainer direction="column" justifyContent="space-between">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Blog App - Login</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Card variant="outlined">
         <Typography
           component="h1"
