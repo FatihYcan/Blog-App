@@ -8,7 +8,7 @@ This project is a blogging application where users can create and share blog pos
 - **Creating, Editing and Deleting Blog Posts**: Users can create new blog posts, edit existing posts and delete their posts whenever they want.
 - **Notification System**: The application allows users to receive notifications when they perform various operations (such as success, error, warning). User-friendly notifications are displayed using the React-Toastify library.
 - **Blog Management by Categories**: Blog posts can be viewed and managed more regularly by dividing them into categories.
-- **Comment and Like Management**: Users can comment on blog posts and interact by liking them.
+- **Comment and Like Management**: Users can comment on blog posts, update their comments, delete their comments and interact by liking them.
 - **About Page**: The app includes an 'About' page that provides information about the developer. Users can easily access LinkedIn and GitHub profiles.
 - **Login via Social Media**: Users can have a quick and easy login experience by logging in with their Google account.
 
@@ -40,7 +40,7 @@ Bu proje, kullanıcıların blog yazıları oluşturup paylaşabilecekleri bir b
 - **Blog Yazısı Oluşturma, Düzenleme ve Silme**: Kullanıcılar, yeni blog yazıları oluşturabilir, mevcut yazılarını düzenleyebilir ve istedikleri zaman yazılarını silebilirler.
 - **Bildirim Sistemi**: Uygulama, kullanıcıların çeşitli işlemleri gerçekleştirdiğinde (başarı, hata, uyarı gibi) bildirimler almasını sağlar. React-Toastify kütüphanesi kullanılarak kullanıcı dostu bildirimler gösterilir.
 - **Kategorilere Göre Blog Yönetimi**: Blog yazıları kategorilere ayrılarak daha düzenli bir şekilde görüntülenebilir ve yönetilebilir.
-- **Yorum ve Beğeni Yönetimi**: Kullanıcılar, blog yazılarına yorum yapabilir ve beğenerek etkileşimde bulunabilirler.
+- **Yorum ve Beğeni Yönetimi**: Kullanıcılar, blog yazılarına yorum yapabilir, yorumlarını güncelleyebilir, yorumlarını silebilir ve beğenerek etkileşimde bulunabilirler.
 - **Hakkında Sayfası**: Uygulama, geliştirici hakkında bilgi veren bir "Hakkında" sayfası içerir. Kullanıcılar, LinkedIn ve GitHub profillerine kolayca erişebilirler.
 - **Sosyal Medya ile Giriş**: Kullanıcılar, Google hesabı ile giriş yaparak hızlı ve kolay bir oturum açma deneyimi yaşayabilirler.
 
