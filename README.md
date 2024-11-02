@@ -61,3 +61,4 @@ Bu proje, kullanıcıların blog yazıları oluşturup paylaşabilecekleri bir b
 - Formik ve Yup
 - [BLOG API](https://blog-api-js.fullstack.clarusway.com/)
 
+[Live](https://fy-blog-app.netlify.app/)
