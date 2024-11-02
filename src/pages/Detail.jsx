@@ -19,8 +19,9 @@ import CommentForm from "../components/blog/CommentForm";
 import UpdateModal from "../components/blog/UpdateModal";
 import DeleteModal from "../components/blog/DeleteModal";
 import { styled } from "@mui/material/styles";
+import { Helmet } from "react-helmet";
 
-const SyledCardContent = styled(CardContent)({
+const StyledCardContent = styled(CardContent)(() => ({
   display: "flex",
   flexDirection: "column",
   gap: 4,
@@ -29,7 +30,30 @@ const SyledCardContent = styled(CardContent)({
   "&:last-child": {
     paddingBottom: 16,
   },
-});
+}));
+
+const toTitleCase = (str) => {
+  if (!str) return "";
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+const formatContent = (text) => {
+  if (!text) return "";
+  return text.split('\n').map((line, index) => {
+    const formattedLine = line.charAt(0).toUpperCase() + line.slice(1);
+    return (
+      <span key={index}>
+        {formattedLine}
+        <br />
+        <br />
+      </span>
+    );
+  });
+};
 
 export default function Detail() {
   const { _id } = useParams();
@@ -44,6 +68,7 @@ export default function Detail() {
   const [imageSize, setImageSize] = React.useState({ width: 0, height: 0 });
   const [editingCommentId, setEditingCommentId] = React.useState(null);
   const [deletingCommentId, setDeletingCommentId] = React.useState(null);
+  const [head, setHead] = React.useState("Blog App");
 
   const handleOpen = () => {
     setData({
@@ -71,19 +96,26 @@ export default function Detail() {
 
   React.useEffect(() => {
     getDetails({ id: _id });
+  }, [like]);
+
+  React.useEffect(() => {
+    if (details.title) {
+      setHead(`Blog App - ${toTitleCase(details.title)}`);
+    }
+  }, [details.title]);
+
+  React.useEffect(() => {
     const img = new Image();
     img.src = details.image;
 
     img.onload = () => {
       setImageSize({ width: img.width, height: img.height });
     };
-  }, [details.image, like]);
+  }, [details.image]);
 
   const name = details.userId ? details.userId.username : "";
   const isTallImage = imageSize.height * 1.5 > imageSize.width;
-  const formattedName =
-    name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-
+  const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   const categoryName = details.categoryId ? details.categoryId.name : "";
 
   const handleEditComment = (commentId, commentText) => {
@@ -113,6 +145,11 @@ export default function Detail() {
         marginBottom: "1.5rem",
       }}
     >
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{head}</title>
+        <link rel="canonical" href="http://mysite.com/example" />
+      </Helmet>
       <Box
         sx={{
           maxWidth: "70%",
@@ -140,23 +177,21 @@ export default function Detail() {
             </Avatar>
           }
           title={name}
-          subheader={
-            details.createdAt && new Date(details.createdAt).toLocaleString()
-          }
+          subheader={details.createdAt && new Date(details.createdAt).toLocaleString()}
         />
 
-        <SyledCardContent>
+        <StyledCardContent>
           <Typography variant="body2" color="text.secondary">
             {categoryName}
           </Typography>
-        </SyledCardContent>
+        </StyledCardContent>
 
         <CardContent>
           <Typography component="h1" variant="body1">
-            {title}
+            {toTitleCase(title)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {content}
+            {formatContent(content)}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -204,8 +239,7 @@ export default function Detail() {
           <>
             <CommentForm
               editingComment={
-                comments.find((comment) => comment._id === editingCommentId)
-                  ?.comment
+                comments.find((comment) => comment._id === editingCommentId)?.comment
               }
               editingCommentId={editingCommentId}
               setEditingCommentId={setEditingCommentId}
