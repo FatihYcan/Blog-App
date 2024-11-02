@@ -24,6 +24,7 @@ This project is a blogging application where users can create and share blog pos
 - Axios
 - React Router
 - React-Toastify
+- React-Helmet
 - Redux Persist
 - Formic and Yup
 - [BLOG API](https://blog-api-js.fullstack.clarusway.com/)
@@ -55,6 +56,7 @@ Bu proje, kullanıcıların blog yazıları oluşturup paylaşabilecekleri bir b
 - Axios
 - React Router
 - React-Toastify
+- React-Helmet
 - Redux Persist
 - Formik ve Yup
 - [BLOG API](https://blog-api-js.fullstack.clarusway.com/)
